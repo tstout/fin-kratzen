@@ -17,7 +17,10 @@
               [^java.math.BigDecimal amount []]
               [^java.sql.Timestamp recordCreated []])
 
+
 ;
 ; TODO
 ;
-(defn read-boa-record [])
+(defn fetch-boa [])
+
+(defn save-boa [])
