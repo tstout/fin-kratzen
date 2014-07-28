@@ -15,7 +15,8 @@
                                                     javax.jms/jms
                                                     com.sun.jmdk/jmxtools
                                                     com.sun.jmx/jmxri]]]
-  :plugins [[lein-idea "1.0.1"]]
+  :plugins [[lein-idea "1.0.1"]
+            [lein-expectations "0.0.7"]]
   :main kratzen.core)
 
 
