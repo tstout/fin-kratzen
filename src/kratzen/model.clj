@@ -6,11 +6,11 @@
 ;RECORD_CREATED datetime default current_timestamp(),
 ;
 
-;
-; Define interface(s) needed by db-io...
-; Might be easier just to define this with java...
-; Would a protocol have any benefit here...
-;
+;;
+;; Define interface(s) needed by db-io...
+;; Might be easier just to define this with java...
+;; Would a protocol have any benefit here?
+;;
 (definterface BoaRecord
               [^String bankId []]
               [^java.sql.Date postingDate []]

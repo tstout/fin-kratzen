@@ -4,3 +4,4 @@
 
 
 (expect 2 2)
+(expect 4 4)

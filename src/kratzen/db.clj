@@ -10,18 +10,16 @@
             [clojure.java.io :as io])
   (:use [clojure.tools.logging :only (info error)]))
 
-;
-; Database related stuff...
-;
-;(in-ns 'kratzen.core)
+;;
+;; Database related stuff...
+;;
 
 (def init-schema
   (load-res "init-schema.sql"))
 
-;
-; Pull DB user and pass from boa config
-;
 (def db-config
+  "Returns a map containing :user and :pass
+  for the BOA database"
   (let [cfg (load-config)
         boa (cfg :boa)]
     (zipmap [:user :pass] [(boa :db-user) (boa :db-pass)])))
@@ -36,18 +34,16 @@
 ;
 ; Startup local H2 in server mode
 ;
-(defn start-h2 []
+(defn start-h2
+  "Start a local H2 TCP Server"
+  []
   (info "starting h2...")
   (let [h2Server (Server/createTcpServer (into-array String []))]
     (.start h2Server)))
 
-(defn start-h2-mem []
 
-  )
-
-;
-; Create a db.io.Migtrator
-;
-(defn mk-migrator []
+(defn mk-migrator
+  "Create a db.io.Migrator for H2"
+  []
   (Migrators/liquibase (H2Db.) db-creds))
 

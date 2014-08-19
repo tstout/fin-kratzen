@@ -3,7 +3,10 @@
             [clojure.java.io :as io])
   (:use [clojure.tools.logging :only (info error)]))
 
-(defn load-config []
+(defn load-config
+  "Load configuration from ~/.fin-kratzen.clj
+   The config must be in EDN format"
+  []
   (-> (io/file (System/getProperty "user.home"), ".fin-kratzen.clj")
       slurp
       edn/read-string))

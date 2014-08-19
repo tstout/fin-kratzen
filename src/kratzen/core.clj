@@ -5,8 +5,8 @@
             [clojure.java.io :as io])
   (:use [clojure.tools.logging :only (info error)]))
 
-(load "db")
-(load "model")
+(#_ (load "db"))
+(#_ (load "model"))
 
 (defn -main []
   (info "fin-kratzen starting...")
