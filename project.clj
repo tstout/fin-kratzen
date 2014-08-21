@@ -3,7 +3,7 @@
   :url "https://github.com/tstout/fin-kratzen"
   :license {:name "MIT"
             :url "http://opensource.org/licenses/MIT"}
-  :dependencies [[org.clojure/clojure "1.5.1"]
+  :dependencies [[org.clojure/clojure "1.6.0"]
                  [com.github.tstout/db-io "0.0.1"]
                  [com.github.tstout/ofx-io "0.0.1"]
                  [expectations "2.0.6"]
@@ -15,10 +15,9 @@
                                                     javax.jms/jms
                                                     com.sun.jmdk/jmxtools
                                                     com.sun.jmx/jmxri]]]
+  :uberjar-exclusions [#"expectations*" #"junit*"]
   :plugins [[lein-idea "1.0.1"]
             [lein-expectations "0.0.7"]]
-  :main kratzen.core)
+  :main kratzen.core
+  :aot [kratzen.core])
 
-
-;
-; Why

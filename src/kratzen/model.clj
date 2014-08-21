@@ -1,4 +1,4 @@
-(in-ns 'kratzen.core)
+(ns kratzen.model)
 
 ;BANK_ID varchar(100) not null,
 ;POSTING_DATE date not null,

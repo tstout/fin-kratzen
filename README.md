@@ -1,9 +1,9 @@
-# default
+# fin-kratzen
 
-A service that periodically downloads and stores financial statements from BOA.
+A service that periodically downloads and stores bank statements.
 
 ## Usage
-
+TODO
 
 ## License
 
