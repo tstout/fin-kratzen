@@ -18,6 +18,7 @@
   :uberjar-exclusions [#"expectations*" #"junit*"]
   :plugins [[lein-idea "1.0.1"]
             [lein-expectations "0.0.7"]]
+  :resource-paths ["resources" "resources/sql"]
   :main kratzen.core
   :aot [kratzen.core])
 

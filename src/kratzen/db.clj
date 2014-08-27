@@ -14,7 +14,7 @@
 ;; Database related stuff...
 ;;
 
-(def init-schema
+(def ^:privte init-schema
   (load-res "init-schema.sql"))
 
 (def db-config
@@ -25,15 +25,8 @@
     (zipmap [:user :pass] [(boa :db-user) (boa :db-pass)])))
 
 (def db-creds
-  ;
-  ; fin-kratzen - db name
-  ; directory - db
-  ;
   (H2Credentials/h2LocalServerCreds "fin-kratzen" "db"))
 
-;
-; Startup local H2 in server mode
-;
 (defn start-h2
   "Start a local H2 TCP Server"
   []
@@ -43,7 +36,7 @@
 
 
 (defn mk-migrator
-  "Create a db.io.Migrator for H2"
+  "Create a schema migrator for H2"
   []
   (Migrators/liquibase (H2Db.) db-creds))
 
