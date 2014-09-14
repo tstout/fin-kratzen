@@ -1,9 +1,20 @@
 # fin-kratzen
 
-A service that periodically downloads and stores bank statements.
+Process data from your bank account.
 
-## Usage
-TODO
+## Motivation
+I hate having to login to my bank account every day to look at the state of my finances.
+Many of the personal finance services available can be nice, but I cringe at the thought 
+of handing them my banking credentials. If I want to aggregate/store/process/query/alert on 
+my banking data without releasing my account credentials to a third party, I must do it myself.
+
+## Roadmap
+This is in the early stages. I'm using it as a project to learn clojure while
+implementing something that I need. The initial goal is to periodically download
+financial transactions and store them in a local database. 
+
+Eventually, some type of analytics and UI
+will be implemented to analyze the data.
 
 ## License
 
