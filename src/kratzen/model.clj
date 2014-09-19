@@ -22,6 +22,10 @@
               [^java.sql.Timestamp recordCreated []])
 
 (comment
+  ;;
+  ;; Is this poor man's heredoc better than storing
+  ;; sql as a resource?
+  ;;
   (def ^:private fetch-sql
     (str
       "select "
@@ -29,22 +33,20 @@
       "from "
       " .... ")))
 
-(def ^:private fetch-sql
-  (load-res "select-boa.sql"))
-
-(def ^:private save-sql
-  (load-res "insert-boa.sql"))
+(def ^:private sql-map
+  {:select-boa (load-res "select-boa.sql")
+   :insert-boa (load-res "insert-boa.sql")})
 
 (defn fetch-boa [conn start end]
   (-> (Queries/newQuery conn)
-      (.run CheckingEntry fetch-sql (object-array [start end]))))
+      (.run CheckingEntry (:select-boa sql-map) (object-array [start end]))))
 
 (defn save-boa [conn records]
   "Assumes records is a seq of vectors, where
   each vector contains the SQL args"
   (doseq [record records]
     ;; TODO - use builder to reuse connection for each insert...
-    (-> (Updates/newUpdate conn save-sql (object-array record))
+    (-> (Updates/newUpdate conn (:insert-boa sql-map) (object-array record))
         (.run))))
 
 (defn to-clj-map

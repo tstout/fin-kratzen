@@ -43,11 +43,11 @@
   4)
 
 ;;
-;; Verify that the sum of the amounts is 10M
+;; Verify that the sum of the amounts is 10
 ;;
 (expect-let
   [transactions (fetch-boa (h2-mem-conn) now now)]
   (reduce + (map #(.amount %) transactions))
   10M)
 
-(#_(expect-fn))
+(#_ (expect-fn))

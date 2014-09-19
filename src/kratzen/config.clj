@@ -5,9 +5,9 @@
 
 (defn load-config
   "Load configuration from ~/.fin-kratzen.clj
-   The config must be in EDN format"
+   The config must be in EDN format."
   []
-  (-> (io/file (System/getProperty "user.home"), ".fin-kratzen.clj")
+  (-> (io/file (System/getProperty "user.home"), ".fin-kratzen/config.clj")
       slurp
       edn/read-string))
 
