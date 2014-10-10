@@ -1,6 +1,7 @@
 (ns kratzen.model-test
   (:import (java.util HashMap Calendar)
-           (java.sql Timestamp))
+           (java.sql Timestamp)
+           (db.io.operations Query Queries Updates))
   (:use [expectations])
   (:require [clj-time.core :as t]
             [kratzen.model :refer :all]
@@ -25,14 +26,19 @@
       (.update "/sql/init-schema.sql"))
   (save-boa (h2-mem-conn) test-data))
 
+(defn teardown
+  {:expectations-options :after-run}
+  []
+  (Updates/newUpdate (h2-mem-conn) "delete from finkratzen.boa_checking" (object-array [])))
+
+
 ;;
 ;; Validate basic to-clj-map operation...
 ;;
 (expect-let
-  [jmap (HashMap. {"a" "value-for-a"})
-   cmap {:a "value-for-a"}]
+  [jmap (HashMap. {"a" "value-for-a"})]
   (to-clj-map jmap)
-  cmap)
+  {:a "value-for-a"})
 
 ;;
 ;; Verify we can fetch BOA data from DB...
@@ -43,7 +49,7 @@
   4)
 
 ;;
-;; Verify that the sum of the amounts is 10
+;; Verify that the sum of the amounts is 10...
 ;;
 (expect-let
   [transactions (fetch-boa (h2-mem-conn) now now)]

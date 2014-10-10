@@ -23,7 +23,7 @@
 
 (comment
   ;;
-  ;; Is this poor man's heredoc better than storing
+  ;; Is this sytle of poor man's heredoc better than storing
   ;; sql as a resource?
   ;;
   (def ^:private fetch-sql
@@ -33,22 +33,23 @@
       "from "
       " .... ")))
 
-(def ^:private sql-map
+(def ^:private sql
   {:select-boa (load-res "select-boa.sql")
    :insert-boa (load-res "insert-boa.sql")})
 
 (defn fetch-boa [conn start end]
   (-> (Queries/newQuery conn)
-      (.run CheckingEntry (:select-boa sql-map) (object-array [start end]))))
+      (.run CheckingEntry (:select-boa sql) (object-array [start end]))))
 
 (defn save-boa [conn records]
   "Assumes records is a seq of vectors, where
   each vector contains the SQL args"
   (doseq [record records]
     ;; TODO - use builder to reuse connection for each insert...
-    (-> (Updates/newUpdate conn (:insert-boa sql-map) (object-array record))
+    (-> (Updates/newUpdate conn (:insert-boa sql) (object-array record))
         (.run))))
 
+;;
 (defn to-clj-map
   "convert java.util.Map with String keys into to a clojure map
   with keywords as the keys"

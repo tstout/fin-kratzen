@@ -17,7 +17,7 @@
 (defn fetch-boa-trans
   "Load transactions from BOA checking for the specified date range"
   [start end]
-  (let [creds
-         retriever (Retriever. BoaData/CONTEXT, creds)]
-    )
+  ;(let [creds
+  ;       retriever (Retriever. BoaData/CONTEXT, creds)]
+  ;  )
 )
