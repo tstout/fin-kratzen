@@ -1,5 +1,5 @@
 (ns kratzen.core
-  (:require [clojure.tools.cli :refer [parse-opts]])
+  (:require [kratzen.cli :refer :all])
   (:require [kratzen.config :refer :all])
   (:require [kratzen.db :refer :all])
   (:require [kratzen.model :refer :all])
@@ -9,14 +9,14 @@
   (:use [clojure.tools.logging :only (info error)])
   (:gen-class :main true))
 
-(#_ (load "db"))
-(#_ (load "model"))
+(defn show-help []
+  (println (load-res "help.txt")))
+
+(def options
+  {:server {:value false :cmd run-service}
+   :help   {:value false :cmd show-help}})
 
 (defn -main [& args]
-  (info "fin-kratzen starting...")
-
-  (let [server (start-h2)]
-    (info "H2 Server status" (.getStatus server))
-
-    (-> (mk-migrator (h2-local-server-conn))
-        (.update "/sql/init-schema.sql"))))
+  (if (zero? (count args))
+    (show-help)
+    (process-args args options)))
