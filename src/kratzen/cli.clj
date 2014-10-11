@@ -1,7 +1,8 @@
 (ns kratzen.cli
   (:require [clojure.string :as st])
   (:require [kratzen.server :refer :all])
-  (:use [clojure.string :only [replace-first]]))
+  (:use [clojure.string :only [replace-first]])
+  (:use [clojure.tools.logging :only (info error)]))
 
 ;;
 ;; Command line processing.
@@ -22,7 +23,12 @@
 ;; assigned to each option.
 ;;
 ;; Options are assigned a function
-;; via a configuration map
+;; via a configuration map. For example:
+;;
+;; {:server {:cmd run-server :value false}}
+;;
+;; defines an option of --server with no option value
+;; to run the function named run-server
 ;;
 
 (defn- show-help []
@@ -48,8 +54,7 @@
 
 (defn opt-val [cmd-index-pair raw-opts opt-cfg]
   (when (get-in opt-cfg [(first cmd-index-pair) :value])
-    (nth raw-opts (second cmd-index-pair)))
-  nil)
+    (nth raw-opts (inc (second cmd-index-pair)))))
 
 (defn opts-to-cmds [keys-with-index opt-cfg raw-opts]
   "Create a collection of
