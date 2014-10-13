@@ -21,18 +21,6 @@
               [^java.math.BigDecimal amount []]
               [^java.sql.Timestamp recordCreated []])
 
-(comment
-  ;;
-  ;; Is this sytle of poor man's heredoc better than storing
-  ;; sql as a resource?
-  ;;
-  (def ^:private fetch-sql
-    (str
-      "select "
-      "x,y,z "
-      "from "
-      " .... ")))
-
 (def ^:private sql
   {:select-boa (load-res "select-boa.sql")
    :insert-boa (load-res "insert-boa.sql")})

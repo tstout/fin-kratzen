@@ -17,7 +17,4 @@
    :db-user "sa"
    :db-pass ""})
 
-;(expect 1 1)
-;(+ 1 2)
-;(expect 2 1)
 

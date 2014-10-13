@@ -9,8 +9,7 @@
                  [expectations "2.0.6"]
                  [clj-time "0.8.0"]
                  [com.h2database/h2 "1.3.167"]
-                 [org.clojure/tools.cli "0.3.1"]
-                 [org.clojure/tools.logging "0.2.6"]
+                 [org.clojure/tools.logging "0.3.1"]
                  [org.slf4j/slf4j-log4j12 "1.6.6"]
                  [log4j/log4j "1.2.17" :exclusions [javax.mail/mail
                                                     javax.jms/jms

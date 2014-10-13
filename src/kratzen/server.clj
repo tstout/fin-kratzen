@@ -1,6 +1,7 @@
 (ns kratzen.server
   (:use [clojure.tools.logging :only (info error)])
-  (:require [kratzen.db :refer :all]))
+  (:require [kratzen.db :refer :all])
+  (:require [kratzen.scheduler :refer :all]))
 
 (defn start-db []
   (let [server (start-h2)]
@@ -9,4 +10,6 @@
         (.update "/sql/init-schema.sql"))))
 
 (defn run-service []
-  (start-db))
+  (info "Starting Service...")
+  (start-db)
+  (start-scheduler))

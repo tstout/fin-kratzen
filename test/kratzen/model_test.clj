@@ -55,5 +55,3 @@
   [transactions (fetch-boa (h2-mem-conn) now now)]
   (reduce + (map #(.amount %) transactions))
   10M)
-
-(#_ (expect-fn))
