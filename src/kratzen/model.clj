@@ -2,7 +2,9 @@
   (:import (java.sql Date Timestamp)
            (db.io.operations Queries Updates))
   (:require [kratzen.config :refer :all]
-            [clojure.walk :refer :all]))
+            [clojure.walk :refer :all]
+            [kratzen.db :refer :all])
+  (:use [clojure.tools.logging :only (info error)]))
 
 ;;
 ;;BANK_ID varchar(100) not null,

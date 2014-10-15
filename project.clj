@@ -5,7 +5,8 @@
             :url "http://opensource.org/licenses/MIT"}
   :dependencies [[org.clojure/clojure "1.6.0"]
                  [com.github.tstout/db-io "1.0.1"]
-                 [com.github.tstout/ofx-io "0.0.1"]
+                 [net.sf.ofx4j/ofx4j "1.6"]
+                 [com.github.tstout/ofx-io "0.1.0"]
                  [expectations "2.0.6"]
                  [clj-time "0.8.0"]
                  [com.h2database/h2 "1.3.167"]

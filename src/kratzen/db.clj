@@ -22,7 +22,7 @@
   for the BOA database"
   (let [cfg (load-config)
         boa (cfg :boa)]
-    (zipmap [:user :pass] [(boa :db-user) (boa :db-pass)])))
+    (zipmap [:user :pass] [(:db-user boa) (:db-pass boa)])))
 
 (defn db-conn-factory [db-vendor]
   "Create a DB connection factory using db.io"

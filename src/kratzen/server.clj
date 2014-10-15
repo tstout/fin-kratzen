@@ -1,6 +1,7 @@
 (ns kratzen.server
   (:use [clojure.tools.logging :only (info error)])
-  (:require [kratzen.db :refer :all])
+  (:require [kratzen.db :refer :all]
+            [kratzen.boa :refer :all])
   (:require [kratzen.scheduler :refer :all]))
 
 (defn start-db []
@@ -12,4 +13,4 @@
 (defn run-service []
   (info "Starting Service...")
   (start-db)
-  (start-scheduler))
+  (start-task download-boa-stmts 5))

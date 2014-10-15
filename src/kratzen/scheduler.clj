@@ -7,16 +7,17 @@
   (:use [clojure.tools.logging :only (info error)]))
 
 (def ^:private executor
-  (Executors/newCachedThreadPool))
+  (ScheduledThreadPoolExecutor. 1))
 
-(defn download-stmts []
-  (info "downloading stmts..."))
+(defn invoke-task [f]
+  (try
+    (f)
+    (catch Exception e (error e))))
+;;    (catch Exception e (error "Exception" (.getMessage e)))))
 
-(defn start-scheduler []
-  (.scheduleAtFixedRate executor download-stmts 0 5 TimeUnit/SECONDS))
+(defn start-task [f period-in-sec]
+  (info "starting task....")
+  (.scheduleAtFixedRate executor #(invoke-task f) 0 period-in-sec TimeUnit/SECONDS))
 
 (defn stop-scheduler []
   (.shutdown executor))
-
-
-
