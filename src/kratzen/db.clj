@@ -21,7 +21,7 @@
   "A map containing :user and :pass
   for the BOA database"
   (let [cfg (load-config)
-        boa (cfg :boa)]
+        boa (:boa cfg)]
     (zipmap [:user :pass] [(:db-user boa) (:db-pass boa)])))
 
 (defn db-conn-factory [db-vendor]
