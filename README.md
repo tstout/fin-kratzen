@@ -14,7 +14,7 @@ implementing something that I need. The initial goal is to periodically download
 financial transactions and store them in a local database. 
 
 Eventually, some type of analytics and UI
-will be implemented to analyze the data.
+will be implemented. I'm leaning towards clojurescript for the UI.
 
 ## License
 

@@ -2,10 +2,12 @@ insert into
 finkratzen.BOA_CHECKING (
    BANK_ID,
    POSTING_DATE,
-   AMOUNT
+   AMOUNT,
+   DESCRIPTION
 )
 values (
   ?,      -- BANK_ID
   ?,      -- POSTING_DATE
-  ?       -- AMOUNT
+  ?,      -- AMOUNT
+  ?       -- DESCRIPTION
 )

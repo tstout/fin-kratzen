@@ -13,4 +13,4 @@
 (defn run-service []
   (info "Starting Service...")
   (start-db)
-  (start-task download-boa-stmts 5))
+  (start-task download-and-save-stmts (* 60 60)))

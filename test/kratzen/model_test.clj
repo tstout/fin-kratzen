@@ -10,17 +10,15 @@
 (def now (-> (t/now) .toDate))
 
 (def test-data
-  [["483882" now 1.00M]
-   ["483883" now 2.00M]
-   ["483884" now 3.00M]
-   ["483885" now 4.00M]])
+  [["483882" now 1.00M "some tran 1"]
+   ["483883" now 2.00M "some tran 2"]
+   ["483884" now 3.00M "some tran 3"]
+   ["483885" now 4.00M "some tran 4"]])
 
 (defn setup
   {:expectations-options :before-run}
   []
-  ;;
-  ;; Poke Test data into DB...
-  ;;
+  "Poke Test data into a in-memory DB..."
   (-> (h2-mem-conn)
       (mk-migrator)
       (.update "/sql/init-schema.sql"))
