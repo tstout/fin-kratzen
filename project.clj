@@ -4,6 +4,8 @@
   :license {:name "MIT"
             :url "http://opensource.org/licenses/MIT"}
   :dependencies [[org.clojure/clojure "1.6.0"]
+                 [ring/ring-core "1.3.0"]
+                 [ring/ring-jetty-adapter "1.3.0"]
                  [com.github.tstout/db-io "1.0.2"]
                  [net.sf.ofx4j/ofx4j "1.6"]
                  [com.github.tstout/ofx-io "0.1.0"]

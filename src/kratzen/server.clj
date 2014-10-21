@@ -1,8 +1,15 @@
 (ns kratzen.server
   (:use [clojure.tools.logging :only (info error)])
+  (:use [ring.adapter.jetty])
   (:require [kratzen.db :refer :all]
             [kratzen.boa :refer :all])
   (:require [kratzen.scheduler :refer :all]))
+
+(defn handler [request]
+  (info request)
+  {:status 200
+   :headers {"Content-Type" "text/html"}
+   :body "Hello World"})
 
 (defn start-db []
   (let [server (start-h2)]
@@ -13,4 +20,5 @@
 (defn run-service []
   (info "Starting Service...")
   (start-db)
-  (start-task download-and-save-stmts (* 60 60)))
+  (start-task download-and-save-stmts (* 60 60))
+  (run-jetty handler {:port 3000}))

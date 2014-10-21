@@ -34,6 +34,7 @@
 (defn save-boa [conn records]
   "Assumes records is a seq of vectors, where
   each vector contains the SQL args"
+  (info "Processing " (count records) "records")
   (doseq [record records]
     ;; TODO - use builder to reuse connection for each insert...
     (-> (Updates/newUpdate conn (:insert-boa sql) (object-array record))

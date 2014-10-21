@@ -32,7 +32,15 @@
         (.fetch start end))))
 
 (defn get-stmts []
-  (.. (download-boa-stmts) getTransactionList getTransactions))
+  (let [stmts (download-boa-stmts)
+        trans (.getTransactionList stmts)]
+    (info "transaction list is "
+          (if
+              (nil? trans)
+            "nil"
+            (.. trans getTransactions size)))
+    (when-not (nil? trans)
+      (.getTransactions trans))))
 
 (defn extract-stmt-fields [transactions]
   (map
