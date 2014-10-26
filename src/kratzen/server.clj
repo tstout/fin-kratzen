@@ -7,9 +7,9 @@
 
 (defn handler [request]
   (info request)
-  {:status 200
+  {:status  200
    :headers {"Content-Type" "text/html"}
-   :body "Hello World"})
+   :body    "Hello World"})
 
 (defn start-db []
   (let [server (start-h2)]
@@ -20,5 +20,7 @@
 (defn run-service []
   (info "Starting Service...")
   (start-db)
-  (start-task download-and-save-stmts (* 60 60))
+  (start-task
+    #(download-and-save-stmts 1)
+    (* 60 1))
   (run-jetty handler {:port 3000}))

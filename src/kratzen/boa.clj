@@ -23,16 +23,16 @@
   "Create a date some number of days in the past"
   (t/minus (t/now) (t/days offset)))
 
-(defn download-boa-stmts []
+(defn download-boa-stmts [day-offset]
   "Grab BOA statements via ofx-io"
-  (let [start (days-from-now 2)
-        end (days-from-now 1)]
+  (let [start (days-from-now (inc day-offset))
+        end (days-from-now day-offset)]
     (info "Downloading statements for" start end)
     (-> (Retriever. (BoaData.) BoaData/CONTEXT creds)
         (.fetch start end))))
 
-(defn get-stmts []
-  (let [stmts (download-boa-stmts)
+(defn get-stmts [day-offset]
+  (let [stmts (download-boa-stmts day-offset)
         trans (.getTransactionList stmts)]
     (info "transaction list is "
           (if
@@ -47,5 +47,5 @@
     #(vector (.getId %) (.getDatePosted %) (.getAmount %) (.getName %))
     transactions))
 
-(defn download-and-save-stmts []
-  (save-boa (h2-local-server-conn) (extract-stmt-fields (get-stmts))))
+(defn download-and-save-stmts [day-offset]
+  (save-boa (h2-local-server-conn) (extract-stmt-fields (get-stmts day-offset))))

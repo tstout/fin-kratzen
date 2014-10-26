@@ -8,7 +8,8 @@
 ;; Command line processing.
 ;;
 ;; I'm aware of tools.cli, however, I wanted to
-;; do this myself as a learning exercise.
+;; do this myself as a learning exercise. It is very
+;; naive and needs some work.
 ;;
 ;; The goal here is to transform a vector of
 ;; strings:
