@@ -22,5 +22,5 @@
   (start-db)
   (start-task
     #(download-and-save-stmts 1)
-    (* 60 1))
+    5)
   (run-jetty handler {:port 3000}))

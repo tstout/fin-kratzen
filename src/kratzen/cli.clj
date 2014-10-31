@@ -61,7 +61,7 @@
       (inc (second cmd-index-pair)))))
 
 (defn opts-to-cmds [keys-with-index opt-cfg raw-opts]
-  "Create a collection of
+  "Create a vector of
   [{:cmd cmd-fn :opt opt-value-or-nil} ...]"
   (map
     #(zipmap

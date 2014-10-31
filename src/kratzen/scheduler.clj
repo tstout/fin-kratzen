@@ -3,12 +3,12 @@
   (:use [clojure.tools.logging :only (info error)]))
 
 (def ^:private executor
-  (ScheduledThreadPoolExecutor. 1))
+  (ScheduledThreadPoolExecutor. 5))
 
 (defn invoke-task [f]
   (try
     (f)
-    (catch Exception e (error e))))
+    (catch Throwable e (error e))))
 
 (defn start-task [f period-in-sec]
   (info "starting task....")
