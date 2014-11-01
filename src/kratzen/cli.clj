@@ -38,14 +38,16 @@
     (replace-first opt #"^(--|-)", "")))
 
 (defn find-opts [opts-with-index]
+  "filter collection to include any option strings
+  option strings start with -- or -"
   (filter
-    #(some? (re-find #"^(--|-)" (first %1)))
+    #(some? (re-find #"^(--|-)" (first %)))
     opts-with-index))
 
 (defn opts-to-keys [opts-with-index]
   "Replace each [--opt index] with [:opt index]"
   (map
-    #(assoc %1 0 (opt-to-key (first %1)))
+    #(assoc % 0 (opt-to-key (first %)))
     opts-with-index))
 
 (defn opt-val [cmd-index-pair raw-opts opt-cfg]
@@ -53,9 +55,9 @@
   the opt-cfg specifies an option value should be
   present"
   (when
-      (get-in
-        opt-cfg
-        [(first cmd-index-pair) :value])
+    (get-in
+      opt-cfg
+      [(first cmd-index-pair) :value])
     (nth
       raw-opts
       (inc (second cmd-index-pair)))))

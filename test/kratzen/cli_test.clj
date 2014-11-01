@@ -29,7 +29,7 @@
 
 (expect
   [["--opt1" 0] ["--opt2" 1]]
-  (find-opts (add-indices ["--opt1" "--opt2"])))
+  (find-opts (add-indices ["--opt1" "--opt2" "foo"])))
 
 (expect
   [[:opt1 0] [:opt2 1]]
