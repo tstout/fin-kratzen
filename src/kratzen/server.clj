@@ -17,10 +17,12 @@
     (-> (mk-migrator (h2-local-server-conn))
         (.update "/sql/init-schema.sql"))))
 
-(defn run-service []
+(defn run-service
+  ([] (run-service "60"))
+  ([interval]
   (info "Starting Service...")
   (start-db)
   (start-task
     #(download-and-save-stmts 1)
-    5)
-  (run-jetty handler {:port 3000}))
+    (read-string interval))
+  (run-jetty handler {:port 3000})))

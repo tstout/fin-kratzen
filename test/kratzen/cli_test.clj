@@ -42,7 +42,7 @@
   "start"
   (opt-val [:server 0]
            ["--server" "start"]
-           {:server {:cmd :default :value true}}))
+           {:server {:cmd :default}}))
 
 ;;
 ;; verify single arg value with option value not at the beginning of option
@@ -52,13 +52,13 @@
   "1"
   (opt-val [:baz 2]
            ["--foo" "-bar" "--baz" "1"]
-           {:foo {:cmd :default :value false}
-            :bar {:cmd :default :value false}
-            :baz {:cmd :default :value true}}))
+           {:foo {:cmd :default}
+            :bar {:cmd :default}
+            :baz {:cmd :default}}))
 
 ;;
 ;; verify single arg with no option value...
 ;;
 (expect
   [{:cmd :default :opt nil}]
-  (parse-args ["--server"] {:server {:cmd :default :value false}}))
+  (parse-args ["--server"] {:server {:cmd :default}}))

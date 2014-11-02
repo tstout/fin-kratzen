@@ -13,8 +13,8 @@
   (println (load-res "help.txt")))
 
 (def options
-  {:server {:value false :cmd run-service}
-   :help   {:value false :cmd show-help}})
+  {:server {:cmd run-service}
+   :help   {:cmd show-help}})
 
 (defn -main [& args]
   (if (zero? (count args))

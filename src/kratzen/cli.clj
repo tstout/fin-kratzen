@@ -26,7 +26,7 @@
 ;; Options are assigned a function
 ;; via a configuration map. For example:
 ;;
-;; {:server {:cmd run-server :value false}}
+;; {:server {:cmd run-server}}
 ;;
 ;; defines an option of --server with no option value
 ;; to run the function named run-server
@@ -50,17 +50,18 @@
     #(assoc % 0 (opt-to-key (first %)))
     opts-with-index))
 
+(defn option? [arg]
+  "check if arg is a - or -- argument"
+  (some? (re-find #"^(--|-)" arg)))
+
+(defn index-exists? [coll index]
+  (> (count coll) index))
+
 (defn opt-val [cmd-index-pair raw-opts opt-cfg]
-  "Extract the option value from the option if
-  the opt-cfg specifies an option value should be
-  present"
-  (when
-    (get-in
-      opt-cfg
-      [(first cmd-index-pair) :value])
-    (nth
-      raw-opts
-      (inc (second cmd-index-pair)))))
+  "Extract the option value from the option if it is present"
+  (let [val-index (inc (second cmd-index-pair))]
+    (when (index-exists? raw-opts val-index)
+      (nth raw-opts val-index))))
 
 (defn opts-to-cmds [keys-with-index opt-cfg raw-opts]
   "Create a vector of
@@ -68,7 +69,7 @@
   (map
     #(zipmap
       [:cmd :opt]
-      [(get-in opt-cfg [(first %1) :cmd]) (opt-val %1 raw-opts opt-cfg)])
+      [(get-in opt-cfg [(first %) :cmd]) (opt-val % raw-opts opt-cfg)])
     keys-with-index))
 
 (defn add-indices [coll]
