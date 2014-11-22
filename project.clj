@@ -11,6 +11,7 @@
                  [com.github.tstout/ofx-io "0.1.0"]
                  [expectations "2.0.6"]
                  [clj-time "0.8.0"]
+                 [clj-http "1.0.1"]
                  [com.h2database/h2 "1.3.167"]
                  [org.clojure/tools.logging "0.3.1"]
                  [org.slf4j/slf4j-log4j12 "1.6.6"]

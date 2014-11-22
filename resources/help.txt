@@ -6,5 +6,6 @@ _/ ____\__| ____           |  | _____________ _/  |_________ ____   ____
                \/               \/           \/           \/    \/     \/
 Usage:
 --help      Show options
---server    Start the server. This includes the database and scheduled downloads.
+--server    Start the server. This includes the database and periodic
+            statement downloads. An optional interval argument can be specified. The default is 1 hour.
 

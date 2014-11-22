@@ -84,8 +84,8 @@
 
 (defn process-args [args opt-cfg]
   (apply
-    #(when (:cmd %1)
-      (if (:opt %1)
-        ((:cmd %1) (:opt %1))
-        ((:cmd %1))))
+    #(when (:cmd %)
+      (if (:opt %)
+        ((:cmd %) (:opt %))
+        ((:cmd %))))
     (parse-args args opt-cfg)))

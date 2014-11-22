@@ -18,7 +18,7 @@
 (defn setup
   {:expectations-options :before-run}
   []
-  "Poke Test data into a in-memory DB..."
+  "Create schema and poke test data into a test DB..."
   (-> (h2-mem-conn)
       (mk-migrator)
       (.update "/sql/init-schema.sql"))
@@ -27,9 +27,9 @@
 (defn teardown
   {:expectations-options :after-run}
   []
-  (Updates/newUpdate (h2-mem-conn) "delete from finkratzen.boa_checking" (object-array [])))
-
-
+  (-> (h2-mem-conn)
+      (Updates/newUpdate "delete from finkratzen.boa_checking" (object-array []))
+      (.run)))
 ;;
 ;; Validate basic to-clj-map operation...
 ;;

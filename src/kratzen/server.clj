@@ -2,14 +2,11 @@
   (:use [clojure.tools.logging :only (info error)])
   (:use [ring.adapter.jetty])
   (:require [kratzen.db :refer :all]
-            [kratzen.boa :refer :all])
+            [kratzen.boa :refer :all]
+            [kratzen.rest :refer :all])
   (:require [kratzen.scheduler :refer :all]))
 
-(defn handler [request]
-  (info request)
-  {:status  200
-   :headers {"Content-Type" "text/html"}
-   :body    "Hello World"})
+
 
 (defn start-db []
   (let [server (start-h2)]
@@ -18,8 +15,11 @@
         (.update "/sql/init-schema.sql"))))
 
 (defn run-service
-  ([] (run-service "60"))
+  ([]
+   "Start the service with the default download interval of 60 seconds"
+   (run-service "3600"))
   ([interval]
+   "Start the service with the specified download interval in seconds"
   (info "Starting Service...")
   (start-db)
   (start-task

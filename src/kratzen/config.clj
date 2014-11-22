@@ -7,7 +7,8 @@
   "Load configuration from ~/.fin-kratzen/config.clj
    The config must be in EDN format."
   []
-  (-> (io/file (System/getProperty "user.home"), ".fin-kratzen/config.clj")
+  (-> (System/getProperty "user.home")
+      (io/file ".fin-kratzen/config.clj")
       slurp
       edn/read-string))
 
