@@ -2,6 +2,7 @@
   (:import (ofx.client BoaData Retriever Credentials$Builder)
            (net.sf.ofx4j.client AccountStatement))
   (:require [kratzen.config :refer :all]
+            [kratzen.dates :refer :all]
             [kratzen.db :refer :all]
             [clojure.set :refer :all]
             [kratzen.model :refer :all]
@@ -19,16 +20,6 @@
         (.withRouting (:routing cfg))
         (.withAccount (:account cfg))
         (.build))))
-
-(defn days-from-now [offset]
-  "Create a date some number of days in the past"
-  (t/minus (t/now) (t/days offset)))
-
-(defn interval [offset]
-  {:start (-> (days-from-now (inc offset))
-              (.toDate))
-   :end   (-> (days-from-now offset)
-              (.toDate))})
 
 (defn download-boa-stmts [day-offset]
   "Grab BOA statements via ofx-io"
@@ -53,7 +44,7 @@
   (info "Checking local DB for statements in" (:start interval) (:end interval))
   (stmt-keys
     (fetch-boa
-      (h2-local-server-conn) (:start interval) (:end interval))))
+      (:start interval) (:end interval))))
 
 (defn get-stmts [day-offset]
   (let [stmts (download-boa-stmts day-offset)
@@ -75,4 +66,4 @@
   (let [interval (interval day-offset)
         old-stmts (existing-stmts interval)
         ofx-stmts (get-stmts day-offset)]
-    (save-boa (h2-local-server-conn) (extract-stmt-fields (get-stmts day-offset)))))
+    (save-boa h2-local (extract-stmt-fields (get-stmts day-offset)))))

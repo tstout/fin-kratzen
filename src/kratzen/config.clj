@@ -22,3 +22,4 @@
        io/resource
        slurp
        edn/read-string))
+

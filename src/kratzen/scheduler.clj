@@ -12,12 +12,13 @@
 (defn invoke-task [f]
   (try
     (f)
-    (catch Throwable e (error e))))
+    (catch Throwable e (error e e))))
 
 (defn start-task
   [f period-in-sec]
   (info "starting task...." f)
-  (.scheduleAtFixedRate executor #(invoke-task f) 0 period-in-sec TimeUnit/SECONDS))
+  (.scheduleAtFixedRate
+    executor #(invoke-task f) 0 period-in-sec TimeUnit/SECONDS))
 
 (defn stop-scheduler []
   (.shutdown executor))

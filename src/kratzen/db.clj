@@ -49,3 +49,16 @@
   []
   (Migrators/liquibase conn-factory))
 
+(def h2-local
+  {:classname   "org.h2.Driver"
+   :subprotocol "h2"
+   :subname     "tcp://127.0.0.1/~/.fin-kratzen/db/fin-kratzen"
+   :user        (:user db-config)
+   :password    (:pass db-config)})
+
+(def h2-mem
+  {:classname   "org.h2.Driver"
+   :subprotocol "h2"
+   :subname     "mem:fin-kratzen;DB_CLOSE_DELAY=-1"
+   :user        "sa"
+   :password    ""})

@@ -3,26 +3,26 @@
            (java.sql Timestamp)
            (db.io.operations Query Queries Updates))
   (:use [expectations])
-  (:require [clj-time.core :as t]
+  (:require [user :refer :all]
+            [clj-time.core :as t]
+            [kratzen.config :refer :all]
             [kratzen.model :refer :all]
-            [kratzen.db :refer :all]))
+            [kratzen.db :refer :all]
+            [kratzen.dates :refer :all]
+            [clojure.java.jdbc :as jdbc]))
 
-(def now (-> (t/now) .toDate))
+(def posting-date (sql-date 2014 12 12))
 
 (def test-data
-  [["483882" now 1.00M "some tran 1"]
-   ["483883" now 2.00M "some tran 2"]
-   ["483884" now 3.00M "some tran 3"]
-   ["483885" now 4.00M "some tran 4"]])
+  [["483882" posting-date 1.00M "some tran 1"]
+   ["483883" posting-date 2.00M "some tran 2"]
+   ["483884" posting-date 3.00M "some tran 3"]
+   ["483885" posting-date 4.00M "some tran 4"]])
 
 (defn setup
   {:expectations-options :before-run}
   []
-  "Create schema and poke test data into a test DB..."
-  (-> (h2-mem-conn)
-      (mk-migrator)
-      (.update "/sql/init-schema.sql"))
-  (save-boa (h2-mem-conn) test-data))
+  (load-db test-data))
 
 (defn teardown
   {:expectations-options :after-run}
@@ -42,14 +42,14 @@
 ;; Verify we can fetch BOA data from DB...
 ;;
 (expect-let
-  [transactions (fetch-boa (h2-mem-conn) now now)]
-  (.size transactions)
-  4)
+  [transactions (fetch-boa h2-mem posting-date posting-date)]
+  4
+  (.size transactions))
 
 ;;
 ;; Verify that the sum of the amounts is 10...
 ;;
 (expect-let
-  [transactions (fetch-boa (h2-mem-conn) now now)]
-  (reduce + (map #(.amount %) transactions))
-  10M)
+  [transactions (fetch-boa h2-mem posting-date posting-date)]
+  10M
+  (reduce + (map #(:amount %) transactions)))
