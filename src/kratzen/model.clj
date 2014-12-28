@@ -22,10 +22,6 @@
   {:select-boa (load-res "select-boa.sql")
    :insert-boa (load-res "insert-boa.sql")})
 
-;(defn fetch-boa [conn start end]
-;  (-> (Queries/newQuery conn)
-;      (.run CheckingEntry (:select-boa sql) (object-array [start end]))))
-
 (defn fetch-boa
   ([db start end]
    (jdbc/query db [(:select-boa sql) start end]))
@@ -36,26 +32,10 @@
 (defn select-boa []
   (jdbc/query h2-local ["select top(4) * from finkratzen.boa_checking"]))
 
-;(defn save-boa [conn records]
-;  "Assumes records is a seq of vectors, where
-;  each vector contains the SQL args"
-;  (info "Processing " (count records) "records")
-;  (doseq [record records]
-;    ;; TODO - use builder to reuse connection for each insert...
-;    (-> (Updates/newUpdate conn (:insert-boa sql) (object-array record))
-;        (.run))))
-
 (defn save-boa [conn records]
-  "Assumes records is a seq of vectors, where
-  each vector contains the SQL args"
+  "save to boa table..."
   (doseq [record records]
-    (println (str "Processing row..." (nth record 0) ":" (nth record 1)))
-    ;; TODO - this is ugly, see if insert! can support arbitrary unnamed args
-    (jdbc/execute! conn [(:insert-boa sql)
-                         (nth record 0)
-                         (nth record 1)
-                         (nth record 2)
-                         (nth record 3)])))
+    (jdbc/insert! conn :finkratzen.boa_checking record)))
 
 ;;
 (defn to-clj-map

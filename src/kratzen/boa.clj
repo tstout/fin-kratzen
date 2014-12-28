@@ -7,7 +7,7 @@
             [clojure.set :refer :all]
             [kratzen.model :refer :all]
             [clj-time.core :as t])
-  (:use [clojure.tools.logging :only (info error)]))
+  (:use [clojure.tools.logging :as log]))
 
 ;;
 ;; Load BOA credentials from cfg file...
@@ -25,14 +25,14 @@
   "Grab BOA statements via ofx-io"
   (let [start (days-from-now (inc day-offset))
         end (days-from-now day-offset)]
-    (info "Downloading statements for" start end)
+    (log/info "Downloading statements for" start end)
     (-> (Retriever. (BoaData.) BoaData/CONTEXT creds)
         (.installCustomTrustStore)
         (.fetch start end))))
 
 (defn stmt-keys [stmts]
   (map
-    #(hash-map :bank-id (.bankId %) :posting-date (.postingDate %))
+    #(hash-map :bank_id (.bankId %) :posting_date (.postingDate %))
     stmts))
 
 (defn new-stmts [ofx-stmts db-stmts]
@@ -41,7 +41,7 @@
 
 (defn existing-stmts [interval]
   "fetch existing stmts form the db and convert to a clojure map containing the statement keys"
-  (info "Checking local DB for statements in" (:start interval) (:end interval))
+  (log/info "Checking local DB for statements in" (:start interval) (:end interval))
   (stmt-keys
     (fetch-boa
       (:start interval) (:end interval))))
@@ -49,7 +49,7 @@
 (defn get-stmts [day-offset]
   (let [stmts (download-boa-stmts day-offset)
         trans (.getTransactionList stmts)]
-    (info "transaction list is "
+    (log/info "transaction list is "
           (if
             (nil? trans)
             "nil"
