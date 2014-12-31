@@ -23,6 +23,6 @@
   (info "Starting Service...")
   (start-db)
   (start-task
-    #(download-and-save-stmts 1)
+    #(download-and-save-stmts h2-local 1)
     (read-string interval))
   (run-jetty handler {:port 3000})))

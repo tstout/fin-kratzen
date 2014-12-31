@@ -1,12 +1,10 @@
 (ns kratzen.model
-  (:import (java.sql Date Timestamp)
-           (db.io.operations Queries Updates))
   (:require [kratzen.config :refer :all]
             [kratzen.dates :refer :all]
             [clojure.walk :refer :all]
             [kratzen.db :refer :all]
-            [clojure.java.jdbc :as jdbc])
-  (:use [clojure.tools.logging :only (info error)]))
+            [clojure.java.jdbc :as jdbc]
+            [clojure.tools.logging :as log]))
 
 ;;
 ;; Define interface(s) needed by db-io...
@@ -34,6 +32,7 @@
 
 (defn save-boa [conn records]
   "save to boa table..."
+  (log/info "saving" (count records) "BOA records")
   (doseq [record records]
     (jdbc/insert! conn :finkratzen.boa_checking record)))
 

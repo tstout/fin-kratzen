@@ -1,5 +1,5 @@
 ;;
-;; Loaded when running the REPL.
+;; Loaded when running the REPL or running tests.
 ;; Define all your project dev conveniences here.
 ;;
 (ns user
@@ -9,9 +9,10 @@
             [kratzen.boa :refer :all]
             [kratzen.db :refer :all]
             [clojure.java.jdbc :as jdbc]
+            [clj-time.core :as t]
             [clojure.pprint :as pprint]))
 
-(println "-- loading custom REPL settings from user.clj --")
+(println "-- loading custom settings from user.clj --")
 
 (defn load-db [test-data]
   (-> (h2-mem-conn)

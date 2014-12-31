@@ -21,49 +21,65 @@
         (.withAccount (:account cfg))
         (.build))))
 
-(defn download-boa-stmts [day-offset]
-  "Grab BOA statements via ofx-io"
-  (let [start (days-from-now (inc day-offset))
-        end (days-from-now day-offset)]
-    (log/info "Downloading statements for" start end)
-    (-> (Retriever. (BoaData.) BoaData/CONTEXT creds)
-        (.installCustomTrustStore)
-        (.fetch start end))))
-
-(defn stmt-keys [stmts]
+(defn ofx-to-map [transactions]
   (map
-    #(hash-map :bank_id (.bankId %) :posting_date (.postingDate %))
-    stmts))
-
-(defn new-stmts [ofx-stmts db-stmts]
-  "determine stmts that do not already exist in the db"
-  (difference (stmt-keys ofx-stmts) db-stmts))
-
-(defn existing-stmts [interval]
-  "fetch existing stmts form the db and convert to a clojure map containing the statement keys"
-  (log/info "Checking local DB for statements in" (:start interval) (:end interval))
-  (stmt-keys
-    (fetch-boa
-      (:start interval) (:end interval))))
-
-(defn get-stmts [day-offset]
-  (let [stmts (download-boa-stmts day-offset)
-        trans (.getTransactionList stmts)]
-    (log/info "transaction list is "
-          (if
-            (nil? trans)
-            "nil"
-            (.. trans getTransactions size)))
-    (when-not (nil? trans)
-      (.getTransactions trans))))
-
-(defn extract-stmt-fields [transactions]
-  (map
-    #(vector (.getId %) (.getDatePosted %) (.getAmount %) (.getName %))
+    #(hash-map
+      :bank_id (.getId %)
+      :posting_date (.getDatePosted %)
+      :amount (.getAmount %)
+      :description (.getName %))
     transactions))
 
-(defn download-and-save-stmts [day-offset]
+(defn ofx-fetch [start end]
+  (-> (Retriever. (BoaData.) BoaData/CONTEXT creds)
+      (.installCustomTrustStore)
+      (.fetch start end)
+      (.getTransactionList)
+      (.getTransactions)
+      (ofx-to-map)))
+
+(defn download-boa-stmts [day-offset]
+  "Grab BOA statements via ofx-io"
+  (let [start (days-before-now (inc day-offset))
+        end (days-before-now day-offset)]
+    (log/info "Downloading statements for" start end)
+    (ofx-fetch start end)))
+
+(defn get-key [stmt]
+  (vector (:bank_id stmt) (:posting_date stmt)))
+
+(defn stmt-keys [stmts]
+  "Create a set containing only the primary keys of the
+  statement collection"
+  (into #{}
+    (map #(get-key %) stmts)))
+
+(defn new-stmt-keys [ofx-stmts db-stmts]
+  "determine stmts that do not already exist in the db"
+  (difference (stmt-keys ofx-stmts) (stmt-keys db-stmts)))
+
+(defn extract-new-stmts [new-keys stmts]
+  (filter
+    #(contains? new-keys (get-key %))
+    stmts))
+
+(defn existing-stmts [db interval]
+  "fetch existing stmts from the db and convert to a set
+  containing the statement keys"
+  (log/info
+    "Checking local DB for statements in"
+    (:start interval) (:end interval))
+  (stmt-keys
+    (fetch-boa
+      db
+      (:start interval)
+      (:end interval))))
+
+(defn download-and-save-stmts [db day-offset]
   (let [interval (interval day-offset)
-        old-stmts (existing-stmts interval)
-        ofx-stmts (get-stmts day-offset)]
-    (save-boa h2-local (extract-stmt-fields (get-stmts day-offset)))))
+        old-stmts (existing-stmts db interval)
+        ofx-stmts (download-boa-stmts day-offset)]
+    (log/info "Transaction count:" (count ofx-stmts))
+    (save-boa
+      h2-local
+      (extract-new-stmts (new-stmt-keys ofx-stmts old-stmts) ofx-stmts))))
