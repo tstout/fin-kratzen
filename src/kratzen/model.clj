@@ -6,16 +6,6 @@
             [clojure.java.jdbc :as jdbc]
             [clojure.tools.logging :as log]))
 
-;;
-;; Define interface(s) needed by db-io...
-;; Might be easier just to define this with java...
-;;
-(definterface CheckingEntry
-              [^String bankId []]
-              [^java.sql.Date postingDate []]
-              [^java.math.BigDecimal amount []]
-              [^java.sql.Timestamp recordCreated []])
-
 (def ^:private sql
   {:select-boa (load-res "select-boa.sql")
    :insert-boa (load-res "insert-boa.sql")})
