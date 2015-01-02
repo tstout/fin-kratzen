@@ -1,6 +1,6 @@
 (ns kratzen.boa
   (:import (ofx.client BoaData Retriever Credentials$Builder)
-           (net.sf.ofx4j.client AccountStatement))
+           (org.joda.time LocalDate))
   (:require [kratzen.config :refer :all]
             [kratzen.dates :refer :all]
             [kratzen.db :refer :all]
@@ -25,7 +25,7 @@
   (map
     #(hash-map
       :bank_id (.getId %)
-      :posting_date (.getDatePosted %)
+      :posting_date (sql-date (LocalDate. (.getDatePosted %)))
       :amount (.getAmount %)
       :description (.getName %))
     transactions))
@@ -43,7 +43,7 @@
   (let [start (days-before-now (inc day-offset))
         end (days-before-now day-offset)]
     (log/info "Downloading statements for" start end)
-    (ofx-fetch start end)))
+    (ofx-fetch (mk-local-date start) (mk-local-date end))))
 
 (defn get-key [stmt]
   (vector (:bank_id stmt) (:posting_date stmt)))
@@ -52,11 +52,11 @@
   "Create a set containing only the primary keys of the
   statement collection"
   (into #{}
-    (map #(get-key %) stmts)))
+        (map #(get-key %) stmts)))
 
 (defn new-stmt-keys [ofx-stmts db-stmts]
   "determine stmts that do not already exist in the db"
-  (difference (stmt-keys ofx-stmts) (stmt-keys db-stmts)))
+    (difference (stmt-keys ofx-stmts) (stmt-keys db-stmts)))
 
 (defn extract-new-stmts [new-keys stmts]
   (filter
@@ -69,17 +69,21 @@
   (log/info
     "Checking local DB for statements in"
     (:start interval) (:end interval))
-  (stmt-keys
     (fetch-boa
       db
       (:start interval)
-      (:end interval))))
+      (:end interval)))
 
 (defn download-and-save-stmts [db day-offset]
   (let [interval (interval day-offset)
         old-stmts (existing-stmts db interval)
         ofx-stmts (download-boa-stmts day-offset)]
-    (log/info "Transaction count:" (count ofx-stmts))
+    (log/info "Transaction count:" (count ofx-stmts)
+              "DB Stmt count:" (count old-stmts))
     (save-boa
-      h2-local
-      (extract-new-stmts (new-stmt-keys ofx-stmts old-stmts) ofx-stmts))))
+      db
+      (let [new-keys (new-stmt-keys ofx-stmts old-stmts)]
+        (doseq [key new-keys]
+          (log/info "new-key:" key))
+        (extract-new-stmts new-keys ofx-stmts)))))
+

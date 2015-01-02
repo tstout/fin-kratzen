@@ -34,6 +34,7 @@
   "save to boa table..."
   (log/info "saving" (count records) "BOA records")
   (doseq [record records]
+    (log/info "Saving " record)
     (jdbc/insert! conn :finkratzen.boa_checking record)))
 
 ;;
