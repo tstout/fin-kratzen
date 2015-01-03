@@ -22,11 +22,11 @@
                                                               com.sun.jmx/jmxri]]]
             :uberjar-exclusions [#"expectations*" #"junit*"]
             :plugins [[lein-idea "1.0.1"]
-                      [lein-autoexpect "1.2.2"]
+                      [lein-autoexpect "1.4.2"]
                       [lein-expectations "0.0.7"]]
             :resource-paths ["resources" "resources/sql"]
             :profiles {:dev {:source-paths ["dev"]
-                             :dependencies [[org.clojure/tools.namespace "0.2.4"]]}}
+                             :dependencies [[org.clojure/tools.namespace "0.2.8"]]}}
             :repl-options {:init-ns user}
             :main kratzen.core)
 ;;:aot [kratzen.core]) ;; causes trouble with namespace reloading
