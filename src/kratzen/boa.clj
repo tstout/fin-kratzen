@@ -31,12 +31,16 @@
     transactions))
 
 (defn ofx-fetch [start end]
-  (-> (Retriever. (BoaData.) BoaData/CONTEXT creds)
-      (.installCustomTrustStore)
-      (.fetch start end)
-      (.getTransactionList)
-      (.getTransactions)
-      (ofx-to-map)))
+  (let [tran-list
+        (-> (Retriever. (BoaData.) BoaData/CONTEXT creds)
+            (.installCustomTrustStore)
+            (.fetch start end)
+            (.getTransactionList))
+        trans (if
+                (nil? tran-list)
+                {}
+                (.getTransactions tran-list))]
+    (ofx-to-map trans)))
 
 (defn download-boa-stmts [day-offset]
   "Grab BOA statements via ofx-io"
@@ -56,7 +60,7 @@
 
 (defn new-stmt-keys [ofx-stmts db-stmts]
   "determine stmts that do not already exist in the db"
-    (difference (stmt-keys ofx-stmts) (stmt-keys db-stmts)))
+  (difference (stmt-keys ofx-stmts) (stmt-keys db-stmts)))
 
 (defn extract-new-stmts [new-keys stmts]
   (filter
@@ -69,10 +73,10 @@
   (log/info
     "Checking local DB for statements in"
     (:start interval) (:end interval))
-    (fetch-boa
-      db
-      (:start interval)
-      (:end interval)))
+  (fetch-boa
+    db
+    (:start interval)
+    (:end interval)))
 
 (defn download-and-save-stmts [db day-offset]
   (let [interval (interval day-offset)
