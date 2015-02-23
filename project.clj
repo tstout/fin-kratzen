@@ -10,6 +10,7 @@
                            [net.sf.ofx4j/ofx4j "1.6"]
                            [com.github.tstout/ofx-io "0.1.0"]
                            [expectations "2.0.6"]
+                           [com.stuartsierra/component "0.2.2"]
                            [clj-time "0.8.0"]
                            [org.clojure/java.jdbc "0.3.5"]
                            [clj-http "1.0.1"]

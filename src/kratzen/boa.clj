@@ -1,12 +1,15 @@
 (ns kratzen.boa
   (:import (ofx.client BoaData Retriever Credentials$Builder)
-           (org.joda.time LocalDate))
+           (org.joda.time LocalDate)
+           (com.stuartsierra.component Lifecycle))
   (:require [kratzen.config :refer :all]
             [kratzen.dates :refer :all]
             [kratzen.db :refer :all]
             [clojure.set :refer :all]
             [kratzen.model :refer :all]
-            [clj-time.core :as t])
+            [kratzen.scheduler :refer :all]
+            [clj-time.core :as t]
+            [com.stuartsierra.component :as component])
   (:use [clojure.tools.logging :as log]))
 
 ;;
@@ -31,6 +34,7 @@
     transactions))
 
 (defn ofx-fetch [start end]
+  "Call ofx-io to download statements"
   (let [tran-list
         (-> (Retriever. (BoaData.) BoaData/CONTEXT creds)
             (.installCustomTrustStore)
@@ -91,3 +95,17 @@
           (log/info "new-key:" key))
         (extract-new-stmts new-keys ofx-stmts)))))
 
+(defrecord BoaDownload [scheduler interval-in-s]
+  component/Lifecycle
+
+  (start [this]
+    (assoc this :boa-download
+                (start-task
+                  scheduler #(download-and-save-stmts h2-local 2)
+                  interval-in-s)))
+
+  (stop [this]
+    (.cancel (:boa-download this) false)))
+
+(defn boa-download [interval-in-s]
+  (map->BoaDownload {:interval-in-s interval-in-s}))

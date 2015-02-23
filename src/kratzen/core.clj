@@ -16,3 +16,5 @@
   (if (zero? (count args))
     (show-help)
     (process-args args options)))
+
+(defrecord foo [bar bazz])

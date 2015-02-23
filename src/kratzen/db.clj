@@ -1,14 +1,13 @@
 (ns kratzen.db
-  (:import (db.io.config DBCredentials DBVendor DBCredentials$Builder))
+  (:import (db.io.config DBVendor DBCredentials$Builder))
   (:import (db.io.migration Migrators)
            (db.io.config Databases))
   (:import (org.h2.tools Server))
-  (:import (java.sql Timestamp))
-  (:import (java.sql Date))
-  (:require [kratzen.config :refer :all])
+  (:require [kratzen.config :refer :all]
+            [com.stuartsierra.component :as component])
   (:require [clojure.edn :as edn]
-            [clojure.java.io :as io])
-  (:use [clojure.tools.logging :only (info error)]))
+            [clojure.java.io :as io]
+            [clojure.tools.logging :as log]))
 
 ;;
 ;; Database related stuff...
@@ -40,7 +39,7 @@
 (defn start-h2
   "Start a local H2 TCP Server"
   []
-  (info "starting h2...")
+  (log/info "starting h2...")
   (let [h2Server (Server/createTcpServer (into-array String []))]
     (.start h2Server)))
 
@@ -56,9 +55,22 @@
    :user        (:user db-config)
    :password    (:pass db-config)})
 
+
 (def h2-mem
   {:classname   "org.h2.Driver"
    :subprotocol "h2"
    :subname     "mem:fin-kratzen;DB_CLOSE_DELAY=-1"
    :user        "sa"
    :password    ""})
+
+(defrecord Database []
+  component/Lifecycle
+
+  (start [component]
+    (log/info "Starting DB...")
+    (assoc component :db-server (start-h2)))
+
+  (stop [component]
+    (log/info "stopping DB...")
+    (.stop (:db-server component))
+    (assoc component :db-server nil)))
