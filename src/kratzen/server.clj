@@ -19,7 +19,7 @@
 (def conf {})
 
 (defn get-system [conf]
-  "Create a system of individual components "
+  "Create a system out of individual components "
   (component/system-map
     :scheduler (new-scheduler 2)
     :database (Database.)

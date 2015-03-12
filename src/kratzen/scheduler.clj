@@ -4,7 +4,7 @@
             [com.stuartsierra.component :as component]))
 
 ;;
-;; Simple at the moment. When the need arises, I'll probably use cronj
+;; Simple for the moment. When the need arises, I'll probably use cronj
 ;; https://github.com/zcaudate/cronj
 ;;
 ;(def ^:private executor
@@ -37,6 +37,7 @@
     (log/info "stopping scheduler")
     (.shutdown (:thread-pool component))
     (assoc component :thread-pool nil)))
+
 
 (defn new-scheduler [num-threads]
   (map->Scheduler {:num-threads num-threads}))

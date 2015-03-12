@@ -1,7 +1,6 @@
 (ns kratzen.boa
   (:import (ofx.client BoaData Retriever Credentials$Builder)
-           (org.joda.time LocalDate)
-           (com.stuartsierra.component Lifecycle))
+           (org.joda.time LocalDate))
   (:require [kratzen.config :refer :all]
             [kratzen.dates :refer :all]
             [kratzen.db :refer :all]
