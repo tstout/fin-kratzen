@@ -15,8 +15,7 @@
 (println "-- loading custom settings from user.clj --")
 
 (defn load-db [test-data]
-  (-> (h2-mem-conn)
-      (mk-migrator)
+  (-> (mk-migrator h2-mem)
       (.update "/sql/init-schema.sql"))
   (save-boa h2-mem test-data))
 

@@ -10,23 +10,23 @@
            (kratzen.http Http)))
 
 
-(defn start-db []
-  (let [server (start-h2)]
-    (info "H2 Server status" (.getStatus server))
-    (-> (mk-migrator (h2-local-server-conn))
-        (.update "/sql/init-schema.sql"))))
+;(defn start-db []
+;  (let [server (start-h2)]
+;    (info "H2 Server status" (.getStatus server))
+;    (-> (mk-migrator (h2-remote-server-conn))
+;        (.update "/sql/init-schema.sql"))))
 
 (def conf {})
 
 (defn get-system [conf]
   "Create a system out of individual components "
   (component/system-map
-    :scheduler (new-scheduler 2)
     :database (Database.)
+    :scheduler (component/using (new-scheduler 2) [:database])
     :http (Http.)
     :boa-download (component/using
-                    (boa-download 60)
-                    [:scheduler ])))
+                    (boa-download 3600)
+                    [:scheduler :database])))
 
 (def system (get-system conf))
 
@@ -35,9 +35,9 @@
   ;  "Start the service with the default download interval of 60 seconds"
   ;  (run-service "3600"))
   ([]
-    "Start the service with the specified download interval in seconds"
-    (info "Starting Service...")
-    (alter-var-root #'system component/start)))
-    ;(start-task
-    ;  #(download-and-save-stmts h2-local 1)
-    ;  (read-string interval))))
+   "Start the service with the specified download interval in seconds"
+   (info "Starting Service...")
+   (alter-var-root #'system component/start)))
+;(start-task
+;  #(download-and-save-stmts h2-local 1)
+;  (read-string interval))))

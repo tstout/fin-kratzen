@@ -7,11 +7,24 @@
 ;; Thanks to John Lawrence Aspden for providing a nice intro to ring
 ;; http://www.learningclojure.com/2013/01/getting-started-with-ring.html
 
+(def ^:private routes
+  {:get  []
+   :post []
+   })
+
+(defmulti controller
+          (fn [request]
+            (routes (request :path))))
+
+
 (defn handler [request]
-  (log/info request)
+  (log/info "uri")
   {:status  200
    :headers {"Content-Type" "text/html"}
    :body    "Hello World"})
+
+(defn uri-to-fn []
+  )
 
 ;;(defn api-doc [])
 
