@@ -53,16 +53,15 @@
   (let [spec db-spec]
     (Migrators/liquibase
       (reify ConnFactory
-        (connection [this]
+        (connection [_]
           (jdbc/get-connection spec))))))
 
 (def h2-local
   {:classname   "org.h2.Driver"
    :subprotocol "h2"
-   :subname     (format "tcp://%s/~/.fin-kratzen/db/fin-kratzen" (host-name))
+   :subname     (format "tcp://%s/~/.fin-kratzen/db/fin-kratzen;JMX=TRUE" (host-name))
    :user        (:user db-config)
    :password    (:pass db-config)})
-
 
 (def h2-mem
   {:classname   "org.h2.Driver"

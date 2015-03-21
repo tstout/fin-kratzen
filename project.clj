@@ -14,7 +14,7 @@
                            [clj-time "0.8.0"]
                            [org.clojure/java.jdbc "0.3.5"]
                            [clj-http "1.0.1"]
-                           [com.h2database/h2 "1.3.167"]
+                           [com.h2database/h2 "1.3.176"]
                            [org.clojure/tools.logging "0.3.1"]
                            [org.slf4j/slf4j-log4j12 "1.6.6"]
                            [log4j/log4j "1.2.17" :exclusions [javax.mail/mail
@@ -29,6 +29,10 @@
             :profiles {:dev {:source-paths ["dev"]
                              :dependencies [[org.clojure/tools.namespace "0.2.8"]]}}
             :repl-options {:init-ns user}
-            :main kratzen.core)
+            :main kratzen.core
+            :jvm-opts ["-Dcom.sun.management.jmxremote"
+                       "-Dcom.sun.management.jmxremote.port=8004"
+                       "-Dcom.sun.management.jmxremote.authenticate=false"
+                       "-Dcom.sun.management.jmxremote.ssl=false"])
 ;;:aot [kratzen.core]) ;; causes trouble with namespace reloading
 
