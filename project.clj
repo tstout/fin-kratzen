@@ -16,6 +16,7 @@
                            [clj-http "1.0.1"]
                            [com.h2database/h2 "1.3.176"]
                            [org.clojure/tools.logging "0.3.1"]
+                           [org.clojure/data.json "0.2.6"]
                            [org.slf4j/slf4j-log4j12 "1.6.6"]
                            [log4j/log4j "1.2.17" :exclusions [javax.mail/mail
                                                               javax.jms/jms

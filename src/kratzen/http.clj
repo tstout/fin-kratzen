@@ -1,32 +1,54 @@
 (ns kratzen.http
   (:use [clojure.tools.logging :as log])
   (:use [ring.adapter.jetty])
-  (:import (com.stuartsierra.component Lifecycle)))
+  (:import (com.stuartsierra.component Lifecycle))
+  (:require [clj-time.core :as t]
+            [clojure.data.json :as json]))
 
-;;
-;; Thanks to John Lawrence Aspden for providing a nice intro to ring
-;; http://www.learningclojure.com/2013/01/getting-started-with-ring.html
+(def ^:private start-time
+  (t/now))
 
-(def ^:private routes
-  {:get  []
-   :post []
+(defn uptime []
+  (str
+    (t/in-seconds
+      (t/interval start-time (t/now)))
+    "s"))
+
+(def routes
+  {"/about" "about"
+   "/ping"  "ping"
    })
 
-(defmulti controller
-          (fn [request]
-            (routes (request :path))))
+(defn mk-response
+  "create a ring response map"
+  ([body]
+   (mk-response body 200 {"Content-Type" "text/html"}))
 
+  ([body status]
+   (mk-response body status {"Content-Type" "text/html"}))
+
+  ([body status headers]
+   {:status  status
+    :headers headers
+    :body    body}))
+
+(defmulti controller
+          (fn [uri]
+            (routes uri)))
+
+(defmethod controller "ping" [_]
+  (mk-response (json/write-str {:uptime (uptime)})))
+
+(defmethod controller :default [_]
+  (mk-response "404: Not Found" 404))
+
+(defmethod controller "about" [_]
+  (mk-response "Not Yet Implemented\n"))
 
 (defn handler [request]
-  (log/info "uri")
-  {:status  200
-   :headers {"Content-Type" "text/html"}
-   :body    "Hello World"})
-
-(defn uri-to-fn []
-  )
-
-;;(defn api-doc [])
+  (let [uri (:uri request)]
+    (log/info (format "URI: %s" uri))
+    (controller (:uri request))))
 
 (defrecord Http []
   Lifecycle
