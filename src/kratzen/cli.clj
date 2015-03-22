@@ -51,7 +51,7 @@
     opts-with-index))
 
 (defn option? [arg]
-  "check if arg is a - or -- argument"
+  "check if arg is a - or -- argument..."
   (some? (re-find #"^(--|-)" arg)))
 
 (defn index-exists? [coll index]
@@ -77,6 +77,7 @@
   (map #(vector %1 %2) coll (range)))
 
 (defn parse-args [args opt-cfg]
+  "Parse command line args"
   (-> (add-indices args)
       (find-opts)
       (opts-to-keys)

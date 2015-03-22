@@ -10,6 +10,7 @@
     (-> (t/date-time year month day)
         (.getMillis)
         (Date.)))
+
   ([date]
     "create a java.sql.Date from a joda LocalDate"
     (Date.
