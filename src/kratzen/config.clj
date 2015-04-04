@@ -1,7 +1,8 @@
 (ns kratzen.config
   (:require [clojure.edn :as edn]
-            [clojure.java.io :as io])
-  (:use [clojure.tools.logging :only (info error)]))
+            [clojure.java.io :as io]
+            [clojure.tools.logging :as log]
+            [clj-logging-config.log4j :as log-cfg]))
 
 (defn load-config
   "Load configuration from ~/.fin-kratzen/config.clj
@@ -22,4 +23,5 @@
        io/resource
        slurp
        edn/read-string))
+
 

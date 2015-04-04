@@ -4,11 +4,10 @@
            (db.io.config Databases DBHost))
   (:import (org.h2.tools Server)
            (java.net InetAddress)
-           (db.io.core ConnFactory))
+           (db.io.core ConnFactory)
+           (org.h2.jdbcx JdbcConnectionPool))
   (:require [kratzen.config :refer :all]
-            [com.stuartsierra.component :as component])
-  (:require [clojure.edn :as edn]
-            [clojure.java.io :as io]
+            [com.stuartsierra.component :as component]
             [clojure.tools.logging :as log]
             [clojure.java.jdbc :as jdbc]))
 
@@ -19,9 +18,15 @@
   (def ^:privte init-schema
     (load-res "init-schema.sql")))
 
+;(defn host-name2 []
+;  (-> (InetAddress)
+;      (getLocalHost)
+;      (getHostName)))
+
+
 (defn host-name []
   (let [host (.. InetAddress getLocalHost getHostName)]
-    (log/info (format "Using host name %s for DB..." host))
+    (log/infof "Using host name %s for DB..." host)
     host))
 
 (def db-config
@@ -59,7 +64,7 @@
 (def h2-local
   {:classname   "org.h2.Driver"
    :subprotocol "h2"
-   :subname     (format "tcp://%s/~/.fin-kratzen/db/fin-kratzen;JMX=TRUE" (host-name))
+   :subname     (format "tcp://%s/~/.fin-kratzen/db/fin-kratzen;jmx=true" (host-name))
    :user        (:user db-config)
    :password    (:pass db-config)})
 
@@ -69,6 +74,16 @@
    :subname     "mem:fin-kratzen;DB_CLOSE_DELAY=-1"
    :user        "sa"
    :password    ""})
+
+(defn pool-db-spec [db-spec]
+  "Creates a simple H2 connection pool (supplied by H2)
+   Nothing fancy, but probably adequate for this app.
+  "
+  {:datasource
+   (JdbcConnectionPool/create
+     (format "jdbc:h2:%s" (:subname db-spec))
+     (:user db-spec)
+     (:password db-spec))})
 
 (defrecord Database []
   component/Lifecycle
