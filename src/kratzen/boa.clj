@@ -7,7 +7,6 @@
             [clojure.set :refer :all]
             [kratzen.model :refer :all]
             [kratzen.scheduler :refer :all]
-            [clj-time.core :as t]
             [com.stuartsierra.component :as component])
   (:use [clojure.tools.logging :as log]))
 

@@ -47,7 +47,7 @@
 
 (defn handler [request]
   (let [uri (:uri request)]
-    (log/info (format "URI: %s" uri))
+    (log/infof "URI: %s" uri)
     (controller (:uri request))))
 
 (defrecord Http []

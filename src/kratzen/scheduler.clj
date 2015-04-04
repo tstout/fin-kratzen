@@ -7,8 +7,6 @@
 ;; Simple for the moment. When the need arises, I'll probably use cronj
 ;; https://github.com/zcaudate/cronj
 ;;
-;(def ^:private executor
-;  (ScheduledThreadPoolExecutor. 2))
 
 (defn invoke-task [f]
   (try
@@ -22,9 +20,6 @@
   (log/info "starting task...." f)
   (.scheduleAtFixedRate
     (:thread-pool scheduler) #(invoke-task f) 0 period-in-sec TimeUnit/SECONDS))
-
-;(defn stop-scheduler []
-;  (.shutdown executor))
 
 (defrecord Scheduler [thread-pool num-threads]
   component/Lifecycle

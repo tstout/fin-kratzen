@@ -3,27 +3,31 @@
   (:use [ring.adapter.jetty])
   (:require [kratzen.db :refer :all]
             [kratzen.boa :refer :all]
-            [kratzen.http :refer :all])
+            [kratzen.http :refer :all]
+            [kratzen.config :refer :all]
+            [kratzen.logging :refer :all]
+            [kratzen.channels :refer :all])
+
   (:require [kratzen.scheduler :refer :all]
-            [com.stuartsierra.component :as component])
-  (:import (kratzen.db Database)
-           (kratzen.http Http)))
+            [com.stuartsierra.component :as component]
+            [clojure.core.async :refer [chan]]))
 
-
-;(defn start-db []
-;  (let [server (start-h2)]
-;    (info "H2 Server status" (.getStatus server))
-;    (-> (mk-migrator (h2-remote-server-conn))
-;        (.update "/sql/init-schema.sql"))))
-
-(def conf {})
+(def conf
+  {:channels {:log-chan (chan)}
+   :db-spec  (pool-db-spec h2-local)})
 
 (defn get-system [conf]
-  "Create a system out of individual components "
+  "Create a system out of individual components.
+  The ->Record constructors appear to be necessary
+  to prevent some namespace loading issues. This problem
+  was troubling. More research is needed to determine
+  if this is the right solution.
+  "
   (component/system-map
-    :database (Database.)
+    :database (->Database)
+    :logging (component/using (->Logger (:channels conf) (:db-spec conf)) [:database])
     :scheduler (component/using (new-scheduler 2) [:database])
-    :http (Http.)
+    :http (->Http)
     :boa-download (component/using
                     (boa-download 3600)
                     [:scheduler :database])))
@@ -36,6 +40,7 @@
   ;  (run-service "3600"))
   ([]
    "Start the service with the specified download interval in seconds"
+    ;;(init-logging)
    (info "Starting Service...")
    (alter-var-root #'system component/start)))
 ;(start-task
