@@ -12,20 +12,25 @@
 
 (defn fetch-boa
   ([db start end]
-   (jdbc/query db [(:select-boa sql) start end]))
+   {:pre (:datasource db)}
+   (jdbc/with-db-connection [conn db]
+                            (println conn)
+                            (jdbc/query conn [(:select-boa sql) start end])))
+
   ([db offset]
    (let [interv (interval offset)]
      (fetch-boa db (:start interv) (:end interv)))))
 
 (defn select-boa []
-  (jdbc/query h2-local ["select top(4) * from finkratzen.boa_checking"]))
+  (jdbc/query pool-db-spec ["select top(4) * from finkratzen.boa_checking"]))
 
-(defn save-boa [conn records]
+(defn save-boa [db records]
   "save to boa table..."
   (log/info "saving" (count records) "BOA records")
-  (doseq [record records]
-    (log/info "Saving " record)
-    (jdbc/insert! conn :finkratzen.boa_checking record)))
+  (jdbc/with-db-connection [conn db]
+                           (doseq [record records]
+                             (log/info "Saving " record)
+                             (jdbc/insert! conn :finkratzen.boa_checking record))))
 
 ;;
 (defn to-clj-map

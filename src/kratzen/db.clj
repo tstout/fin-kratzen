@@ -18,12 +18,6 @@
   (def ^:privte init-schema
     (load-res "init-schema.sql")))
 
-;(defn host-name2 []
-;  (-> (InetAddress)
-;      (getLocalHost)
-;      (getHostName)))
-
-
 (defn host-name []
   (let [host (.. InetAddress getLocalHost getHostName)]
     (log/infof "Using host name %s for DB..." host)
@@ -75,7 +69,7 @@
    :user        "sa"
    :password    ""})
 
-(defn pool-db-spec [db-spec]
+(defn- mk-h2-pool [db-spec]
   "Creates a simple H2 connection pool (supplied by H2)
    Nothing fancy, but probably adequate for this app.
   "
@@ -84,6 +78,8 @@
      (format "jdbc:h2:%s" (:subname db-spec))
      (:user db-spec)
      (:password db-spec))})
+
+(def pool-db-spec (memoize mk-h2-pool))
 
 (defrecord Database []
   component/Lifecycle
