@@ -42,7 +42,7 @@
 
 (defn- init-logging [db-spec]
 
-  (comment
+  (#_
     (log-cfg/set-config-logging-level! :debug))
 
   (log-cfg/set-loggers!
