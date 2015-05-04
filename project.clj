@@ -11,6 +11,7 @@
                            [net.sf.ofx4j/ofx4j "1.6"]
                            [com.github.tstout/ofx-io "0.1.0"]
                            [expectations "2.0.6"]
+                           [judgr "0.3.0"]
                            [com.stuartsierra/component "0.2.2"]
                            [clj-time "0.8.0"]
                            [org.clojure/java.jdbc "0.3.5"]
@@ -33,10 +34,10 @@
             :profiles {:dev {:source-paths ["dev"]
                              :dependencies [[org.clojure/tools.namespace "0.2.8"]]}}
             :repl-options {:init-ns user}
-            :main kratzen.core
-            :jvm-opts ["-Dcom.sun.management.jmxremote"
-                       "-Dcom.sun.management.jmxremote.port=8004"
-                       "-Dcom.sun.management.jmxremote.authenticate=false"
-                       "-Dcom.sun.management.jmxremote.ssl=false"])
+            :main kratzen.core)
+            ;:jvm-opts ["-Dcom.sun.management.jmxremote"
+            ;           "-Dcom.sun.management.jmxremote.port=8004"
+            ;           "-Dcom.sun.management.jmxremote.authenticate=false"
+            ;           "-Dcom.sun.management.jmxremote.ssl=false"])
 ;;:aot [kratzen.core]) ;; causes trouble with namespace reloading
 

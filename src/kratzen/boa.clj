@@ -99,7 +99,7 @@
   (start [this]
     (assoc this :boa-download
                 (start-task
-                  scheduler #(download-and-save-stmts h2-local 2)
+                  scheduler #(download-and-save-stmts (pool-db-spec h2-local) 2)
                   interval-in-s)))
 
   (stop [this]
