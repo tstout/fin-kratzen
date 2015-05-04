@@ -13,9 +13,9 @@
 (defn fetch-boa
   ([db start end]
    {:pre (:datasource db)}
-   (jdbc/with-db-connection [conn db]
-                            (println conn)
-                            (jdbc/query conn [(:select-boa sql) start end])))
+   (jdbc/with-db-connection
+     [conn db]
+     (jdbc/query conn [(:select-boa sql) start end])))
 
   ([db offset]
    (let [interv (interval offset)]
@@ -27,10 +27,11 @@
 (defn save-boa [db records]
   "save to boa table..."
   (log/info "saving" (count records) "BOA records")
-  (jdbc/with-db-connection [conn db]
-                           (doseq [record records]
-                             (log/info "Saving " record)
-                             (jdbc/insert! conn :finkratzen.boa_checking record))))
+  (jdbc/with-db-connection
+    [conn db]
+    (doseq [record records]
+      (log/info "Saving " record)
+      (jdbc/insert! conn :finkratzen.boa_checking record))))
 
 ;;
 (defn to-clj-map

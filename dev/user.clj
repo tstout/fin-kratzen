@@ -8,6 +8,7 @@
             [kratzen.model :refer :all]
             [kratzen.boa :refer :all]
             [kratzen.db :refer :all]
+            [kratzen.classifier :refer :all]
             [clojure.java.jdbc :as jdbc]
             [clj-time.core :as t]
             [clojure.pprint :as pprint]

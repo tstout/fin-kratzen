@@ -5,6 +5,7 @@
             [kratzen.boa :refer :all]
             [kratzen.http :refer :all]
             [kratzen.config :refer :all]
+            [kratzen.classifier :refer :all]
             [kratzen.logging :refer :all]
             [kratzen.channels :refer :all])
 
@@ -25,8 +26,15 @@
   "
   (component/system-map
     :database (->Database)
-    :logging (component/using (->Logger (:channels conf) (:db-spec conf)) [:database])
-    :scheduler (component/using (new-scheduler 2) [:database])
+    :logging (component/using
+               (->Logger (:channels conf) (:db-spec conf))
+               [:database])
+    :scheduler (component/using
+                 (new-scheduler 2)
+                 [:database])
+    :classifier (component/using
+                  (->BayesClassifier (:db-spec conf))
+                  [:database])
     :http (->Http)
     :boa-download (component/using
                     (boa-download 3600)
