@@ -7,6 +7,7 @@
             [clojure.set :refer :all]
             [kratzen.model :refer :all]
             [kratzen.scheduler :refer :all]
+            [kratzen.classifier :refer [update-classifications]]
             [com.stuartsierra.component :as component])
   (:use [clojure.tools.logging :as log]))
 
@@ -84,6 +85,7 @@
   (let [interval (interval day-offset)
         old-stmts (existing-stmts db interval)
         ofx-stmts (download-boa-stmts day-offset)]
+
     (log/info "Transaction count:" (count ofx-stmts)
               "DB Stmt count:" (count old-stmts))
     (save-boa
@@ -91,7 +93,9 @@
       (let [new-keys (new-stmt-keys ofx-stmts old-stmts)]
         (doseq [key new-keys]
           (log/info "new-key:" key))
-        (extract-new-stmts new-keys ofx-stmts)))))
+        (extract-new-stmts new-keys ofx-stmts)))
+
+    (update-classifications (pool-db-spec h2-local))))
 
 (defrecord BoaDownload [scheduler interval-in-s]
   component/Lifecycle

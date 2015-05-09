@@ -63,14 +63,19 @@
     (doseq [record (jdbc/query conn [(:load-training sql)])]
       (add-category classifier (keyword (:category record)) (:data record)))))
 
-(defn make-classifier [db-spec]
+(defn mk-classifier [db-spec]
   (classifier-from (load-categories db-spec)))
 
 (defn prime-classifier [db-spec]
-  (let [classifier (make-classifier db-spec)]
+  (let [classifier (mk-classifier db-spec)]
     (load-training-data classifier db-spec)
     ;;(classify-stmts db-spec classifier)
     classifier))
+
+(defn update-classifications [db-spec]
+  (->>
+    (prime-classifier db-spec)
+    (classify-stmts db-spec)))
 
 (defrecord BayesClassifier [db-spec]
   Lifecycle
