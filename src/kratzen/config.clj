@@ -11,7 +11,8 @@
       slurp
       edn/read-string))
 
-(defn load-res [res]
+(defn
+  load-res [res]
   (-> res
       io/resource
       slurp))

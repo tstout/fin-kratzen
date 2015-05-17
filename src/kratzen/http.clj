@@ -5,6 +5,8 @@
            (org.joda.time.format PeriodFormatterBuilder)
            (org.joda.time Period))
   (:require [clj-time.core :as t]
+            [ring.util.response :as resp]
+            [kratzen.config :refer [load-res]]
             [clojure.data.json :as json]))
 
 (def ^:private start-time
@@ -33,6 +35,7 @@
 (def routes
   {"/about" "about"
    "/ping"  "ping"
+   "/"      "index"
    })
 
 (defn mk-response
@@ -52,12 +55,16 @@
           (fn [uri]
             (routes uri)))
 
+(defmethod controller "index" [_]
+  (resp/resource-response "index.html" {:root "public"}))
+
 (defmethod controller "ping" [_]
   (mk-response (json/write-str {:uptime (uptime)
                                 :uptime-in-s (uptime-in-seconds)})))
 
-(defmethod controller :default [_]
-  (mk-response "404: Not Found" 404))
+(defmethod controller :default [req]
+  (log/info "default controller case..." req)
+  (resp/resource-response req {:root "public"}))
 
 (defmethod controller "about" [_]
   (mk-response "Not Yet Implemented\n"))
