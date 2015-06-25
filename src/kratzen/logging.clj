@@ -10,7 +10,7 @@
 ;;
 ;; Logging config via https://github.com/malcolmsparks/clj-logging-config
 ;;
-(def log-ns
+(def ^:private log-ns
   ["kratzen.db"
    "kratzen.server"
    "kratzen.http"

@@ -8,6 +8,7 @@
                            [clj-logging-config "1.9.12"]
                            [ring/ring-core "1.3.2" :exclusions [org.clojure/tools.reader]]
                            [ring/ring-jetty-adapter "1.3.2"]
+                           [racehub/om-bootstrap "0.5.0"]
                            [com.github.tstout/db-io "1.0.3" :exclusions [com.google.guava/guava]]
                            [com.github.tstout/ofx-io "0.1.1"]
                            [expectations "2.0.6"]
@@ -52,8 +53,14 @@
                                                  :output-to            "resources/public/js/compiled/kratzen.js"
                                                  :output-dir           "resources/public/js/compiled/out"
                                                  :source-map-timestamp true
-                                                 :verbose true}}
-                                 ]}
+                                                 :verbose              true}}
+
+                                 {:id           "release"
+                                  :source-paths ["src-cljs"]
+                                  :compiler     {
+                                                 :output-to     "resources/public/js/compiled/kratzen.js"
+                                                 :optimizations :advanced
+                                                 :pretty-print  false}}]}
             :figwheel {
                        ;; :http-server-root "public" ;; default and assumes "resources"
                        ;; :server-port 3449 ;; default
