@@ -2,9 +2,8 @@
   (:require [clj-logging-config.log4j :as log-cfg]
             [com.stuartsierra.component :as component]
             [clojure.java.jdbc :as jdbc]
-            [clojure.pprint :as pp]
             [kratzen.db :refer [h2-local]])
-  (:import (org.apache.log4j EnhancedPatternLayout ConsoleAppender FileAppender AppenderSkeleton)
+  (:import (org.apache.log4j EnhancedPatternLayout ConsoleAppender AppenderSkeleton)
            (java.util Date)))
 
 ;;

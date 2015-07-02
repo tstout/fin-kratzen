@@ -9,19 +9,19 @@
             [kratzen.config :refer [load-res]]
             [clojure.data.json :as json]))
 
-(def ^:private start-time
+(defonce ^:private start-time
   (t/now))
 
 (defn uptime []
   (-> (PeriodFormatterBuilder.)
     (.appendDays)
-    (.appendSuffix " d")
+    (.appendSuffix " d ")
     (.appendHours)
-    (.appendSuffix " h")
+    (.appendSuffix " h ")
     (.appendMinutes)
     (.appendSuffix " m ")
     (.appendSeconds)
-    (.appendSuffix " s")
+    (.appendSuffix " s ")
     (.printZeroNever)
     (.toFormatter)
     (.print (Period. start-time (t/now)))))

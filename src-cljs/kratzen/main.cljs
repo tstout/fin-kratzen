@@ -10,55 +10,67 @@
             [clojure.data :as data]
             [clojure.string :as string]))
 
-(defonce app-state (atom {}))
+(defonce app-state (atom {:boa-stmts
+                          [{:record_created #inst "2015-06-28"
+                            :amount         -88.0000M
+                            :description    "Check"
+                            :posting_date   #inst "2015-06-26"
+                            :bank_id        "84492162840-88.00015062625558365.87"},
+                           {:record_created #inst "2015-06-28"
+                            :amount         -66.7300M
+                            :description    "MARKET STREET   06/26 #000742017"
+                            :posting_date   #inst "2015-06-26"
+                            :bank_id        "00095060626-66.7301506268453.87"}
+                           ]}))
 
-(defn btn-grp []
-  (b/button-group {}
-                  (b/button {} "Left")
-                  (b/button {} "Middle")
-                  (b/button {} "Right")))
-
-;;
-(defn grid-example []
-  (d/div
-    {:class "grids-examples"}
-    (g/grid {}
-            (g/row {:class "show-grid"}
-                   (g/col {:xs 12 :md 8}
-                          (d/code {} "(g/col {:xs 12 :md 8})"))
-                   (g/col {:xs 6 :md 2}
-                          (d/code {} "(g/col {:xs 6 :md 2})")))
-            (g/row {:class "show-grid"}
-                   (g/col {:xs 6 :md 2}
-                          (d/code {} "(g/col {:xs 6 :md 2})"))
-                   (g/col {:xs 6 :md 4}
-                          (d/code {} "(g/col {:xs 6 :md 4})"))
-                   (g/col {:xs 6 :md 4}
-                          (d/code {} "(g/col {:xs 6 :md 4})")))
-            (g/row {:class "show-grid"}
-                   (g/col {:xs 6 :xs-offset 6}
-                          (d/code {} "(g/col {:xs 6 :xs-offset 6})")))
-            (g/row {:class "show-grid"}
-                   (g/col {:md 6 :md-push 6}
-                          (d/code {} "(g/col {:md 6 :md-push 6})"))
-                   (g/col {:md 6 :md-pull 6}
-                          (d/code {} "(g/col {:md 6 :md-push 6})"))))))
-
-(defn table-example []
-  (table {:responsive? true}
-         (d/thead
-           (d/tr
-             (d/th "#")
-             (repeat 6 (d/th "Table heading")))
-           (d/tbody
-             (for [i (range 3)]
+(defn sample-table [data owner]
+  (reify
+    om/IRender
+    (render [this]
+      (table {:striped? true :bordered? true :condensed? true :hover? true}
+             (d/thead
                (d/tr
-                 (d/td (str (inc i)))
-                 (repeat 6 (d/td "Table cell"))))))))
+                 (d/th "#")
+                 (d/th "First Name")
+                 (d/th "Last Name")
+                 (d/th "Username")))
+             (d/tbody
+               (d/tr
+                 (d/td "1")
+                 (d/td "Mark")
+                 (d/td "Otto")
+                 (d/td "@mdo"))
+               (d/tr
+                 (d/td "2")
+                 (d/td "Jacob")
+                 (d/td "Thornton")
+                 (d/td "@fat"))
+               (d/tr
+                 (d/td "3")
+                 (d/td {:col-span 2} "Larry the Bird")
+                 (d/td "@twitter")))))))
 
+(defn stmt-view [stmt owner]
+  (reify
+    om/IRender
+    (render [this]
+      (d/tr
+        (d/td (str (:posting_date stmt)))
+        (d/td (:description stmt))
+        (d/td (:amount stmt))))))
 
-(om/root
-  (fn [data owner]
-    (om/component (table-example)))
-  app-state
-  {:target (. js/document (getElementById "app"))})
+(defn stmts-view [data owner]
+  (reify
+    om/IRender
+    (render [this]
+      (table {:striped? true :bordered? true :condensed? true :hover? true}
+             (d/thead
+               (d/tr
+                 (d/th "Posting Date")
+                 (d/th "Description")
+                 (d/th "Amount")))
+             (d/tbody
+               (om/build-all stmt-view (:boa-stmts data)))))))
+
+(om/root stmts-view app-state
+         {:target (. js/document (getElementById "app"))})
