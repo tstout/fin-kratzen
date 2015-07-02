@@ -50,14 +50,14 @@
                  (d/td {:col-span 2} "Larry the Bird")
                  (d/td "@twitter")))))))
 
-(defn stmt-view [stmt owner]
+(defn stmt-view [{:keys [posting_date description amount]} owner]
   (reify
     om/IRender
     (render [this]
       (d/tr
-        (d/td (str (:posting_date stmt)))
-        (d/td (:description stmt))
-        (d/td (:amount stmt))))))
+        (d/td (str posting_date))
+        (d/td description)
+        (d/td amount)))))
 
 (defn stmts-view [data owner]
   (reify
