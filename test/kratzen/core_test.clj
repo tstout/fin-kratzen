@@ -3,9 +3,9 @@
 ; expectations test library.
 ;
 (ns kratzen.core-test
-  (:use [expectations])
-  (:require [kratzen.config :refer :all])
-  (:require [kratzen.core :refer :all]))
+  (:require [kratzen.config :refer :all]
+            [expectations :refer [expect-let]]
+            [kratzen.core :refer :all]))
 
 (expect-let [sample-config (load-edn-resource ".fin-kratzen-example.clj")
              boa-config (:boa sample-config)]

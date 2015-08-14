@@ -30,8 +30,9 @@
         boa (:boa cfg)]
     (zipmap [:user :pass] [(:db-user boa) (:db-pass boa)])))
 
-(defn db-conn-factory [db-vendor]
+(defn db-conn-factory
   "Create a DB connection factory using db.io"
+  [db-vendor]
   (Databases/newConnFactory db-vendor
                             (-> (DBCredentials$Builder.)
                                 (.withDbhost (DBHost. (host-name)))
@@ -41,14 +42,16 @@
 (defn h2-mem-conn []
   (db-conn-factory DBVendor/H2_MEM))
 
-(defn start-h2 []
+(defn start-h2
   "Start a local H2 TCP Server"
+  []
   (log/info "starting h2...")
   (let [h2Server (Server/createTcpServer (into-array String ["-tcpAllowOthers"]))]
     (.start h2Server)))
 
-(defn mk-migrator [db-spec]
+(defn mk-migrator
   "Create a schema migrator for H2"
+  [db-spec]
   (let [spec db-spec]
     (Migrators/liquibase
       (reify ConnFactory
@@ -69,10 +72,11 @@
    :user        "sa"
    :password    ""})
 
-(defn- mk-h2-pool [db-spec]
+(defn- mk-h2-pool
   "Creates a simple H2 connection pool (supplied by H2)
-   Nothing fancy, but probably adequate for this app.
-  "
+   Nothing fancy, but probably adequate for this app."
+  [db-spec]
+
   {:datasource
    (JdbcConnectionPool/create
      (format "jdbc:h2:%s" (:subname db-spec))

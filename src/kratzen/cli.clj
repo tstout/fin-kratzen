@@ -32,52 +32,60 @@
 ;; to run the function named run-server
 ;;
 
-(defn opt-to-key [opt]
+(defn opt-to-key
   "transform --opt or -opt to :opt"
+  [opt]
   (keyword
     (replace-first opt #"^(--|-)", "")))
 
-(defn find-opts [opts-with-index]
+(defn find-opts
   "filter collection to include any option strings
-  option strings start with -- or -"
+ option strings start with -- or -"
+  [opts-with-index]
   (filter
     #(some? (re-find #"^(--|-)" (first %)))
     opts-with-index))
 
-(defn opts-to-keys [opts-with-index]
+(defn opts-to-keys
   "Replace each [--opt index] with [:opt index]"
+  [opts-with-index]
   (map
     #(assoc % 0 (opt-to-key (first %)))
     opts-with-index))
 
-(defn option? [arg]
+(defn option?
   "check if arg is a - or -- argument..."
+  [arg]
   (some? (re-find #"^(--|-)" arg)))
 
 (defn index-exists? [coll index]
   (> (count coll) index))
 
-(defn opt-val [cmd-index-pair raw-opts opt-cfg]
+(defn opt-val
   "Extract the option value from the option if it is present"
+  [cmd-index-pair raw-opts opt-cfg]
   (let [val-index (inc (second cmd-index-pair))]
     (when (index-exists? raw-opts val-index)
       (nth raw-opts val-index))))
 
-(defn opts-to-cmds [keys-with-index opt-cfg raw-opts]
+(defn opts-to-cmds
   "Create a vector of
-  [{:cmd cmd-fn :opt opt-value-or-nil} ...]"
+ [{:cmd cmd-fn :opt opt-value-or-nil} ...]"
+  [keys-with-index opt-cfg raw-opts]
   (map
     #(zipmap
       [:cmd :opt]
       [(get-in opt-cfg [(first %) :cmd]) (opt-val % raw-opts opt-cfg)])
     keys-with-index))
 
-(defn add-indices [coll]
+(defn add-indices
   "transform a seq to include an index with each item"
+  [coll]
   (map #(vector %1 %2) coll (range)))
 
-(defn parse-args [args opt-cfg]
+(defn parse-args
   "Parse command line args"
+  [args opt-cfg]
   (-> (add-indices args)
       (find-opts)
       (opts-to-keys)

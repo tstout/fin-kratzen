@@ -8,8 +8,8 @@
             [kratzen.model :refer :all]
             [kratzen.scheduler :refer :all]
             [kratzen.classifier :refer [update-classifications]]
-            [com.stuartsierra.component :as component])
-  (:use [clojure.tools.logging :as log]))
+            [com.stuartsierra.component :as component]
+            [clojure.tools.logging :as log]))
 
 ;;
 ;; Load BOA credentials from cfg file...
@@ -32,21 +32,22 @@
       :description (.getName %))
     transactions))
 
-(defn ofx-fetch [start end]
+(defn ofx-fetch
   "Call ofx-io to download statements"
+  [start end]
   (let [tran-list
         (-> (Retriever. (BoaData.) BoaData/CONTEXT creds)
             (.installCustomTrustStore)
             (.fetch start end)
             (.getTransactionList))
-        trans (if
-                (nil? tran-list)
+        trans (if (nil? tran-list)
                 {}
                 (.getTransactions tran-list))]
     (ofx-to-map trans)))
 
-(defn download-boa-stmts [day-offset]
+(defn download-boa-stmts
   "Grab BOA statements via ofx-io"
+  [day-offset]
   (let [start (days-before-now (inc day-offset))
         end (days-before-now day-offset)]
     (log/info "Downloading statements for" start end)
@@ -55,14 +56,16 @@
 (defn get-key [stmt]
   (vector (:bank_id stmt) (:posting_date stmt)))
 
-(defn stmt-keys [stmts]
+(defn stmt-keys
   "Create a set containing only the primary keys of the
   statement collection"
+  [stmts]
   (into #{}
         (map #(get-key %) stmts)))
 
-(defn new-stmt-keys [ofx-stmts db-stmts]
+(defn new-stmt-keys
   "determine stmts that do not already exist in the db"
+  [ofx-stmts db-stmts]
   (difference (stmt-keys ofx-stmts) (stmt-keys db-stmts)))
 
 (defn extract-new-stmts [new-keys stmts]
@@ -70,9 +73,10 @@
     #(contains? new-keys (get-key %))
     stmts))
 
-(defn existing-stmts [db interval]
+(defn existing-stmts
   "fetch existing stmts from the db and convert to a set
   containing the statement keys"
+  [db interval]
   (log/info
     "Checking local DB for statements in"
     (:start interval) (:end interval))

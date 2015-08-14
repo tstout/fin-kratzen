@@ -1,13 +1,13 @@
 (ns kratzen.http
-  (:use [clojure.tools.logging :as log])
-  (:use [ring.adapter.jetty])
   (:import (com.stuartsierra.component Lifecycle)
            (org.joda.time.format PeriodFormatterBuilder)
            (org.joda.time Period))
   (:require [clj-time.core :as t]
             [ring.util.response :as resp]
             [kratzen.config :refer [load-res]]
-            [clojure.data.json :as json]))
+            [clojure.data.json :as json]
+            [clojure.tools.logging :as log]
+            [ring.adapter.jetty :refer [run-jetty]]))
 
 (defonce ^:private start-time
   (t/now))

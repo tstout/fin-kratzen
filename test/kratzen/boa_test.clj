@@ -1,11 +1,12 @@
 (ns kratzen.boa-test
-  (:use [expectations])
   (:require [kratzen.boa :refer :all]
-            [kratzen.db :as db]
+            [kratzen.db :refer [pool-db-spec h2-mem]]
             [user :refer :all]
             [kratzen.dates :refer :all]
             [clj-time.core :as t]
-            [clojure.set :refer :all]))
+            [clojure.set :refer :all]
+            [kratzen.db-util :refer [load-db]]
+            [expectations :refer [expect]]))
 
 (def first-posting-date (sql-date 2014 10 17))
 (def second-posting-date (sql-date 2014 10 18))
@@ -70,7 +71,7 @@
 ;;
 (expect
   (count existing-data)
-  (count (existing-stmts db/h2-mem search-intv)))
+  (count (existing-stmts (pool-db-spec h2-mem) search-intv)))
 
 ;;
 ;; Verify new statements identified correctly
@@ -109,7 +110,7 @@
 
 (expect
   (count existing-data)
-  (count (existing-stmts db/h2-mem search-intv)))
+  (count (existing-stmts (pool-db-spec h2-mem) search-intv)))
 
 ;(expect
 ;  new-data

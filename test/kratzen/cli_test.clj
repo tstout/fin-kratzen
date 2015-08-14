@@ -1,6 +1,7 @@
 (ns kratzen.cli-test
-  (:use [expectations])
-  (:require [kratzen.cli :refer :all]))
+  (:require
+    [kratzen.cli :refer :all]
+    [expectations :refer [expect]]))
 
 ;;
 ;; verify '--' creates a keyword

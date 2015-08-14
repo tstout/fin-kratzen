@@ -1,13 +1,12 @@
 (ns kratzen.server
-  (:use [clojure.tools.logging :only (info error)])
-  (:use [ring.adapter.jetty])
   (:require [kratzen.db :refer :all]
             [kratzen.boa :refer :all]
             [kratzen.http :refer :all]
             [kratzen.config :refer :all]
             [kratzen.classifier :refer :all]
             [kratzen.logging :refer :all]
-            [kratzen.channels :refer :all])
+            [kratzen.channels :refer :all]
+            [clojure.tools.logging :refer [info error]])
 
   (:require [kratzen.scheduler :refer :all]
             [com.stuartsierra.component :as component]
@@ -17,13 +16,14 @@
   {:channels {:log-chan (chan)}
    :db-spec  (pool-db-spec h2-local)})
 
-(defn get-system [conf]
+(defn get-system
   "Create a system out of individual components.
   The ->Record constructors appear to be necessary
   to prevent some namespace loading issues. This problem
   was troubling. More research is needed to determine
-  if this is the right solution.
-  "
+  if this is the right solution."
+  [conf]
+
   (component/system-map
     :database (->Database)
     :logging (component/using
@@ -43,11 +43,11 @@
 (def system (get-system conf))
 
 (defn run-service
+  "Start the service with the specified download interval in seconds"
   ;([]
   ;  "Start the service with the default download interval of 60 seconds"
   ;  (run-service "3600"))
   ([]
-   "Start the service with the specified download interval in seconds"
     ;;(init-logging)
    (info "Starting Service...")
    (alter-var-root #'system component/start)))

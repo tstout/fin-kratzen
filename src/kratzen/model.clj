@@ -12,7 +12,7 @@
 
 (defn fetch-boa
   ([db start end]
-   {:pre (:datasource db)}
+   {:pre [(:datasource db)]}
    (jdbc/with-db-connection
      [conn db]
      (jdbc/query conn [(:select-boa sql) start end])))
@@ -24,8 +24,9 @@
 (defn select-boa []
   (jdbc/query pool-db-spec ["select top(4) * from finkratzen.boa_checking"]))
 
-(defn save-boa [db records]
+(defn save-boa
   "save to boa table..."
+  [db records]
   (log/info "saving" (count records) "BOA records")
   (jdbc/with-db-connection
     [conn db]
