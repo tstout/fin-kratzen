@@ -1,7 +1,8 @@
 (ns kratzen.http
   (:import (com.stuartsierra.component Lifecycle)
            (org.joda.time.format PeriodFormatterBuilder)
-           (org.joda.time Period))
+           (org.joda.time Period)
+           (org.eclipse.jetty.server Server))
   (:require [clj-time.core :as t]
             [ring.util.response :as resp]
             [kratzen.config :refer [load-res]]
@@ -83,5 +84,5 @@
 
   (stop [component]
     (log/info "stopping http...")
-    (.stop (:http component))
+    (.stop ^Server (:http component))
     (assoc component :http nil)))
