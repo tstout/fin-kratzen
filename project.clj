@@ -7,7 +7,7 @@
                            [org.clojure/clojurescript "1.7.107" :exclusions [org.clojure/clojure junit]]
                            [com.andrewmcveigh/cljs-time "0.3.11"]
                            [clj-logging-config "1.9.12"]
-                           [ring/ring-core "1.3.2" :exclusions [org.clojure/tools.reader]]
+                           [ring/ring-core "1.4.0" :exclusions [org.clojure/tools.reader]]
                            [ring/ring-jetty-adapter "1.3.2"]
                            [racehub/om-bootstrap "0.5.0"]
                            [com.github.tstout/db-io "1.0.3" :exclusions [com.google.guava/guava]]
