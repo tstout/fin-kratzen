@@ -8,7 +8,7 @@
                            [com.andrewmcveigh/cljs-time "0.3.11"]
                            [clj-logging-config "1.9.12"]
                            [ring/ring-core "1.4.0" :exclusions [org.clojure/tools.reader]]
-                           [ring/ring-jetty-adapter "1.3.2"]
+                           [ring/ring-jetty-adapter "1.4.0"]
                            [racehub/om-bootstrap "0.5.0"]
                            [com.github.tstout/db-io "1.0.3" :exclusions [com.google.guava/guava]]
                            [com.github.tstout/ofx-io "0.1.1"]
