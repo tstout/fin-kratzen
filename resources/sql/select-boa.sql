@@ -1,6 +1,7 @@
 select
   BANK_ID
   ,POSTING_DATE
+  ,DESCRIPTION
   ,AMOUNT
   ,RECORD_CREATED
 from

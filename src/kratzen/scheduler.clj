@@ -14,9 +14,9 @@
     (catch Throwable e (log/error e e))))
 
 (defn start-task
-  [scheduler f period-in-sec]
   "Start a periodic task. The function f is executed at the specified period.
   Returns a java.util.concurrent.Future "
+  [scheduler f period-in-sec]
   (log/info "starting task...." f)
   (.scheduleAtFixedRate
     (:thread-pool scheduler) #(invoke-task f) 0 period-in-sec TimeUnit/SECONDS))

@@ -16,19 +16,20 @@
     [conn db-spec]
     (jdbc/query conn ["select * from FINKRATZEN.CATEGORY"])))
 
-(defn add-category [classifier category train-data]
-  "Add a classification training record to the classifier
-  "
+(defn add-category
+  "Add a classification training record to the classifier"
+  [classifier category train-data]
   {:pre [(keyword? category)
          (string? train-data)
          (not (nil? classifier))]}
   (.train! classifier train-data category))
 
-(defn load-categories [db-spec]
+(defn load-categories
   "Configure the classification categories.
   Judgr suppports per-class probability thresholds.
-  For the moment, these are disabled.
-  "
+  For the moment, these are disabled."
+  [db-spec]
+
   (update-settings
     settings
     [:classes]

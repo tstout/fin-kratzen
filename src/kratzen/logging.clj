@@ -2,15 +2,14 @@
   (:require [clj-logging-config.log4j :as log-cfg]
             [com.stuartsierra.component :as component]
             [clojure.java.jdbc :as jdbc]
-            [clojure.pprint :as pp]
             [kratzen.db :refer [h2-local]])
-  (:import (org.apache.log4j EnhancedPatternLayout ConsoleAppender FileAppender AppenderSkeleton)
+  (:import (org.apache.log4j EnhancedPatternLayout ConsoleAppender AppenderSkeleton)
            (java.util Date)))
 
 ;;
 ;; Logging config via https://github.com/malcolmsparks/clj-logging-config
 ;;
-(def log-ns
+(def ^:private log-ns
   ["kratzen.db"
    "kratzen.server"
    "kratzen.http"
@@ -23,15 +22,16 @@
 
 (defn- ev->db-col [ev]
   (let [ev-map (log-ev->map ev)]
-    {:when   (Date. (:timeStamp ev-map))
+    {:when   (Date. ^long(:timeStamp ev-map))
      :logger (:loggerName ev-map)
      :level  (str (:level ev-map))
      :msg    (:message ev-map)
      :thread (:threadName ev-map)
      :ndc    (:NDC ev-map)}))
 
-(defn mk-db-appender [db-spec]
-  "Create a log4j Appender that writes to the DB"
+(defn mk-db-appender
+  "Create a log4j database Appender"
+  [db-spec]
   (let [spec db-spec]
     (proxy [AppenderSkeleton] []
       (append [ev]
@@ -42,7 +42,7 @@
 
 (defn- init-logging [db-spec]
 
-  (#_
+  (comment
     (log-cfg/set-config-logging-level! :debug))
 
   (log-cfg/set-loggers!

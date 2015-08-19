@@ -1,25 +1,28 @@
 (ns kratzen.http
-  (:use [clojure.tools.logging :as log])
-  (:use [ring.adapter.jetty])
   (:import (com.stuartsierra.component Lifecycle)
            (org.joda.time.format PeriodFormatterBuilder)
-           (org.joda.time Period))
+           (org.joda.time Period)
+           (org.eclipse.jetty.server Server))
   (:require [clj-time.core :as t]
-            [clojure.data.json :as json]))
+            [ring.util.response :as resp]
+            [kratzen.config :refer [load-res]]
+            [clojure.data.json :as json]
+            [clojure.tools.logging :as log]
+            [ring.adapter.jetty :refer [run-jetty]]))
 
-(def ^:private start-time
+(defonce ^:private start-time
   (t/now))
 
 (defn uptime []
   (-> (PeriodFormatterBuilder.)
     (.appendDays)
-    (.appendSuffix " d")
+    (.appendSuffix " d ")
     (.appendHours)
-    (.appendSuffix " h")
+    (.appendSuffix " h ")
     (.appendMinutes)
     (.appendSuffix " m ")
     (.appendSeconds)
-    (.appendSuffix " s")
+    (.appendSuffix " s ")
     (.printZeroNever)
     (.toFormatter)
     (.print (Period. start-time (t/now)))))
@@ -33,6 +36,7 @@
 (def routes
   {"/about" "about"
    "/ping"  "ping"
+   "/"      "index"
    })
 
 (defn mk-response
@@ -52,12 +56,16 @@
           (fn [uri]
             (routes uri)))
 
+(defmethod controller "index" [_]
+  (resp/resource-response "index.html" {:root "public"}))
+
 (defmethod controller "ping" [_]
   (mk-response (json/write-str {:uptime (uptime)
                                 :uptime-in-s (uptime-in-seconds)})))
 
-(defmethod controller :default [_]
-  (mk-response "404: Not Found" 404))
+(defmethod controller :default [req]
+  (log/info "default controller case..." req)
+  (resp/resource-response req {:root "public"}))
 
 (defmethod controller "about" [_]
   (mk-response "Not Yet Implemented\n"))
@@ -76,5 +84,5 @@
 
   (stop [component]
     (log/info "stopping http...")
-    (.stop (:http component))
+    (.stop ^Server (:http component))
     (assoc component :http nil)))

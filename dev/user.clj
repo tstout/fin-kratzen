@@ -14,11 +14,11 @@
             [clojure.pprint :as pprint]
             [kratzen.http :as http]))
 
-(println "-- loading custom settings from user.clj --")
-
-(defn load-db [test-data]
-  (-> (mk-migrator h2-mem)
-      (.update "/sql/init-schema.sql"))
-  (save-boa h2-mem test-data))
+;(println "-- loading custom settings from user.clj --")
+;
+;(defn load-db [test-data]
+;  (-> (mk-migrator h2-mem)
+;      (.update "/sql/init-schema.sql"))
+;  (save-boa h2-mem test-data))
 
 
