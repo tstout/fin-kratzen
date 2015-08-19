@@ -9,7 +9,11 @@
             [cljs.core.async :refer [put! chan <! pub]]
             [clojure.data :as data]
             [clojure.string :as string]))
-
+;;
+;; This just a simple place holder for the moment. I'm probably going
+;; to wait for om-next to be ready before continuing the UI work for this
+;; app.
+;;
 (defonce app-state (atom {:boa-stmts
                           [{:record_created #inst "2015-06-28"
                             :amount         -88.0000M
