@@ -19,6 +19,7 @@
                            [org.clojure/java.jdbc "0.4.1"]
                            [com.h2database/h2 "1.3.176"]
                            [sablono "0.3.4"]
+                           [jarohen/chime "0.1.6"]
                            [org.omcljs/om "0.9.0"]
                            [org.clojure/tools.logging "0.3.1"]
                            [org.clojure/core.async "0.1.346.0-17112a-alpha"]

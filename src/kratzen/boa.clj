@@ -6,7 +6,8 @@
             [kratzen.db :refer :all]
             [clojure.set :refer :all]
             [kratzen.model :refer :all]
-            [kratzen.scheduler :refer :all]
+            [kratzen.scheduler :refer [periodic-task]]
+            [clojure.core.async :refer [close!]]
             [kratzen.classifier :refer [update-classifications]]
             [com.stuartsierra.component :as component]
             [clojure.tools.logging :as log]))
@@ -106,12 +107,12 @@
 
   (start [this]
     (assoc this :boa-download
-                (start-task
-                  scheduler #(download-and-save-stmts (pool-db-spec h2-local) 2)
-                  interval-in-s)))
+                (periodic-task
+                  interval-in-s
+                  (fn [_] (download-and-save-stmts (pool-db-spec h2-local) 2)))))
 
   (stop [this]
-    (.cancel (:boa-download this) false)))
+    (close! (:boa-download this))))
 
 (defn boa-download [interval-in-s]
   (map->BoaDownload {:interval-in-s interval-in-s}))
