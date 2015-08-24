@@ -6,11 +6,11 @@
             [clj-time.core :as t]))
 
 (defn mk-chime-ch
-  "Create a channel that will chime at the specified period"
+  "Create a channel that will chime every period seconds"
   [period]
   (log/infof "creating chime channel with period of %d seconds" period)
   (chime-ch (periodic-seq
-              (t/now)
+              (-> 1 t/seconds t/from-now)
               (-> period t/seconds))))
 
 (defn chime-task [ch f]
