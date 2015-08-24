@@ -29,16 +29,13 @@
     :logging (component/using
                (->Logger (:channels conf) (:db-spec conf))
                [:database])
-    :scheduler (component/using
-                 (new-scheduler 2)
-                 [:database])
     :classifier (component/using
                   (->BayesClassifier (:db-spec conf))
                   [:database])
     :http (->Http)
     :boa-download (component/using
                     (boa-download 3600)
-                    [:scheduler :database])))
+                    [:database])))
 
 (def system (get-system conf))
 
