@@ -13,10 +13,15 @@
               (-> 1 t/seconds t/from-now)
               (-> period t/seconds))))
 
+(defn call-with-catch [f arg]
+  (try
+    (f arg)
+    (catch Throwable e (log/error e e))))
+
 (defn chime-task [ch f]
   (go-loop []
     (when-let [msg (<! ch)]
-      (f msg)
+      (call-with-catch f msg)
       (recur)))
   ch)
 
