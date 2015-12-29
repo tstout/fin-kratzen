@@ -10,7 +10,8 @@
 
   (:require [kratzen.scheduler :refer :all]
             [com.stuartsierra.component :as component]
-            [clojure.core.async :refer [chan]]))
+            [clojure.core.async :refer [chan]]
+            [kratzen.backup :refer [->Backup]]))
 
 (def conf
   {:channels {:log-chan (chan)}
@@ -33,6 +34,9 @@
                   (->BayesClassifier (:db-spec conf))
                   [:database])
     :http (->Http)
+    :backup (component/using
+              (->Backup)
+              [:database])
     :boa-download (component/using
                     (boa-download 3600)
                     [:database])))
