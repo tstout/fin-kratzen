@@ -1,28 +1,25 @@
 (ns kratzen.server
-  (:require [kratzen.db :refer :all]
-            [kratzen.boa :refer :all]
-            [kratzen.http :refer :all]
+  (:require [kratzen.db :refer [->Database pool-db-spec h2-local]]
+            [kratzen.boa :refer [boa-download]]
+            [kratzen.http :refer [->Http]]
             [kratzen.config :refer :all]
             [kratzen.classifier :refer :all]
-            [kratzen.logging :refer :all]
+            [kratzen.logging :refer [->Logger]]
             [kratzen.channels :refer :all]
             [clojure.tools.logging :refer [info error]])
 
   (:require [kratzen.scheduler :refer :all]
             [com.stuartsierra.component :as component]
             [clojure.core.async :refer [chan]]
-            [kratzen.backup :refer [->Backup]]))
+            [kratzen.backup :refer [->Backup]]
+            [clojure.tools.logging :as log]))
 
 (def conf
   {:channels {:log-chan (chan)}
    :db-spec  (pool-db-spec h2-local)})
 
 (defn get-system
-  "Create a system out of individual components.
-  The ->Record constructors appear to be necessary
-  to prevent some namespace loading issues. This problem
-  was troubling. More research is needed to determine
-  if this is the right solution."
+  "Create a system out of individual components"
   [conf]
 
   (component/system-map
@@ -35,7 +32,7 @@
                   [:database])
     :http (->Http)
     :backup (component/using
-              (->Backup)
+              (->Backup (:db-spec conf))
               [:database])
     :boa-download (component/using
                     (boa-download 3600)
@@ -50,7 +47,7 @@
   ;  (run-service "3600"))
   ([]
     ;;(init-logging)
-   (info "Starting Service...")
+   (log/info "Starting Service...")
    (alter-var-root #'system component/start)))
 ;(start-task
 ;  #(download-and-save-stmts h2-local 1)

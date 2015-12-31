@@ -20,8 +20,8 @@
 
 (defn chime-task [ch f]
   (go-loop []
-    (when-let [msg (<! ch)]
-      (with-catch f msg)
+    (when-let [time (<! ch)]
+      (with-catch f time)
       (recur)))
   ch)
 

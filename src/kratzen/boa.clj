@@ -3,7 +3,7 @@
            (org.joda.time LocalDate))
   (:require [kratzen.config :refer :all]
             [kratzen.dates :refer :all]
-            [kratzen.db :refer :all]
+            [kratzen.db :refer [pool-db-spec h2-local]]
             [clojure.set :refer :all]
             [kratzen.model :refer :all]
             [kratzen.scheduler :refer [periodic-task]]
