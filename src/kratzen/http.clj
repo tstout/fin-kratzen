@@ -84,5 +84,5 @@
 
   (stop [component]
     (log/info "stopping http...")
-    (.stop ^Server (:http component))
+    (when-let [server (:http component)] (.stop ^Server server))
     (assoc component :http nil)))

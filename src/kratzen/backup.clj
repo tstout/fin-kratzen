@@ -19,6 +19,7 @@
       [(format "backup to '%s'" backup-file)]))
 
 (defn upload-backup [db-spec]
+  (log/infof "creating backup at %s" backup-file)
   (mk-backup db-spec)
   ;(let [gdrive (mk-gdrive)]
   ;            (upload gdrive))
@@ -32,5 +33,6 @@
                           5
                           (fn [_] (upload-backup db-spec)))))
   (stop [this]
-    (log/info "Stopping backup component...")
-    (close! (:boa-download this))))
+    (log/infof "Stopping backup component ...")
+    (when-let [boa-ch (:backup this)] (close! boa-ch))
+    (assoc this :backup nil)))

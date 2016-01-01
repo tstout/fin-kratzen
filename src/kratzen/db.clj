@@ -6,7 +6,7 @@
            (java.net InetAddress)
            (db.io.core ConnFactory)
            (org.h2.jdbcx JdbcConnectionPool))
-  (:require [kratzen.config :refer :all]
+  (:require [kratzen.config :refer [load-res load-config]]
             [com.stuartsierra.component :as component]
             [clojure.tools.logging :as log]
             [clojure.java.jdbc :as jdbc]))
@@ -98,6 +98,6 @@
 
   (stop [component]
     (log/info "stopping DB...")
-    (.stop (:db-server component))
+    (when-let [server (:db-server component)] (.stop server))
     (assoc component :db-server nil)))
 

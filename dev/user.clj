@@ -3,14 +3,10 @@
 ;; Define all your project dev conveniences here.
 ;;
 (ns user
-  (:require [kratzen.config :refer :all]
-            [kratzen.dates :refer :all]
-            [kratzen.model :refer :all]
-            [kratzen.boa :refer :all]
-            [kratzen.db :refer :all]
-            [kratzen.server :refer [system]]
+  (:require [kratzen.system :as system]
+            [kratzen.db :refer [pool-db-spec h2-local]]
             [kratzen.backup :refer [mk-backup backup-file]]
-            [kratzen.classifier :refer :all]
+            [clojure.tools.namespace.repl :refer [refresh refresh-all]]
             [clojure.java.jdbc :as jdbc]
             [gd-io.protocols :refer [upload]]
             [clj-time.core :as t]
@@ -24,26 +20,28 @@
 (def system nil)
 
 (defn init
-  "Constructs the current development system."
+  "Constructs the dev system."
   []
   (alter-var-root #'system
                   (constantly (system/system))))
 
 (defn start
-  "Starts the current development system."
+  "Starts the dev system."
   []
   (alter-var-root #'system system/start))
 
 (defn stop
-  "Shuts down and destroys the current development system."
+  "Shuts down and destroys dev system."
   []
   (alter-var-root #'system
                   (fn [s] (when s (system/stop s)))))
 
 (defn go
-  "Initializes the current development system and starts it running."
+  "Initializes the current dev system and starts it."
   []
   (init)
   (start))
 
-
+(defn reset []
+  (stop)
+  (refresh :after 'user/go))

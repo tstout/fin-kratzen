@@ -1,7 +1,7 @@
 (ns kratzen.core
   (:require [kratzen.cli :refer :all])
   (:require [kratzen.config :refer :all])
-  (:require [kratzen.server :refer :all])
+  (:require [kratzen.system :refer :all])
   (:use [clojure.tools.logging :only (info error)])
   (:gen-class :main true))
 

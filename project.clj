@@ -97,7 +97,8 @@
             :ring {:handler kratzen.http/handler}
             :resource-paths ["resources" "resources/sql" "resources/public"]
             :profiles {:dev {:source-paths ["dev"]
-                             :dependencies []}}
+                             :dependencies [[org.clojure/tools.namespace "0.2.11"]
+                                            [org.clojure/java.classpath "0.2.3"]]}}
             :repl-options {:init-ns user}
             :main kratzen.core)
 ;:jvm-opts ["-Dcom.sun.management.jmxremote"

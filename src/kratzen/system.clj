@@ -1,4 +1,4 @@
-(ns kratzen.server
+(ns kratzen.system
   (:require [kratzen.db :refer [->Database pool-db-spec h2-local]]
             [kratzen.boa :refer [boa-download]]
             [kratzen.http :refer [->Http]]
@@ -9,7 +9,7 @@
             [clojure.tools.logging :refer [info error]])
 
   (:require [kratzen.scheduler :refer :all]
-            [com.stuartsierra.component :as component]
+            [com.stuartsierra.component :as comp]
             [clojure.core.async :refer [chan]]
             [kratzen.backup :refer [->Backup]]
             [clojure.tools.logging :as log]))
@@ -21,34 +21,37 @@
 (defn get-system
   "Create a system out of individual components"
   [conf]
-
-  (component/system-map
+  (comp/system-map
     :database (->Database)
-    :logging (component/using
+    :logging (comp/using
                (->Logger (:channels conf) (:db-spec conf))
                [:database])
-    :classifier (component/using
+    :classifier (comp/using
                   (->BayesClassifier (:db-spec conf))
                   [:database])
     :http (->Http)
-    :backup (component/using
+    :backup (comp/using
               (->Backup (:db-spec conf))
               [:database])
-    :boa-download (component/using
+    :boa-download (comp/using
                     (boa-download 3600)
                     [:database])))
 
-(def system (get-system conf))
+(defn system [] (get-system conf))
 
-(defn run-service
-  "Start the service with the specified download interval in seconds"
-  ;([]
-  ;  "Start the service with the default download interval of 60 seconds"
-  ;  (run-service "3600"))
-  ([]
-    ;;(init-logging)
-   (log/info "Starting Service...")
-   (alter-var-root #'system component/start)))
-;(start-task
-;  #(download-and-save-stmts h2-local 1)
-;  (read-string interval))))
+(defn start
+  "Performs side effects to initialize the system, acquire resources,
+  and start it running. Returns an updated instance of the system."
+  [system]
+  (comp/start system))
+
+(defn stop
+  "Performs side effects to shut down the system and release its
+  resources. Returns an updated instance of the system."
+  [system]
+  (comp/stop system))
+
+(defn run-service []
+  (log/info "Starting Service...")
+  (comp/start (system)))
+
