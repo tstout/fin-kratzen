@@ -38,7 +38,7 @@
       (append [ev]
         (try
           (jdbc/insert! spec :finkratzen.log (ev->db-col ev))
-          (catch Exception e)))
+          (catch Exception e (prn "Exception: " (.getMessage e)))))
 
       (close []
         nil))))

@@ -117,7 +117,8 @@
 
   (stop [this]
     (log/info "Stopping BOA download")
-    (when-let [boa-ch (:boa-download this)] (close! boa-ch))
+    (when-let [boa-ch (:boa-download this)]
+      (close! boa-ch))
     (assoc this :boa-download nil)))
 
 (defn boa-download [interval-in-s]

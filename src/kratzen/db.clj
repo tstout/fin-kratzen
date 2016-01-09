@@ -83,7 +83,26 @@
      (:user db-spec)
      (:password db-spec))})
 
+(defn reset-seq [db-spec seq-name]
+  (jdbc/execute!
+    db-spec
+    [(format "alter sequence %s restart with 0 increment by 1" seq-name)]))
+
+(defn next-seq-val
+  "Get the next value of a sequence"
+  [db-spec seq-name]
+  (jdbc/with-db-connection
+    [conn db-spec]
+    (:value
+      (first
+        (jdbc/query
+          conn
+          [(format "select nextval('%s') as value" seq-name)])))))
+
 (def pool-db-spec (memoize mk-h2-pool))
+
+(def schema-files ["/sql/init-schema.sql"
+                   "/sql/backup-schema.sql"])
 
 (defrecord Database []
   component/Lifecycle
@@ -92,12 +111,15 @@
     (log/info "Starting DB component...")
     (let [db (assoc component :db-server (start-h2))]
       (log/info "Running DB migration...")
-      (-> (mk-migrator h2-local)
-          (.update "/sql/init-schema.sql"))
+      (doseq [script schema-files]
+        (log/infof "processing schema file %s" script)
+        (-> (mk-migrator h2-local)
+            (.update script)))
       db))
 
   (stop [component]
     (log/info "stopping DB...")
-    (when-let [server (:db-server component)] (.stop server))
+    (when-let [server (:db-server component)]
+      (.stop server))
     (assoc component :db-server nil)))
 

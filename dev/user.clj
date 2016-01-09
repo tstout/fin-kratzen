@@ -4,8 +4,11 @@
 ;;
 (ns user
   (:require [kratzen.system :as system]
-            [kratzen.db :refer [pool-db-spec h2-local]]
-            [kratzen.backup :refer [mk-backup backup-file]]
+            [kratzen.db :refer [pool-db-spec
+                                h2-local
+                                next-seq-val
+                                reset-seq]]
+            [kratzen.backup :refer [mk-backup local-backup-file]]
             [clojure.tools.namespace.repl :refer [refresh refresh-all]]
             [clojure.java.jdbc :as jdbc]
             [gd-io.protocols :refer [upload]]
