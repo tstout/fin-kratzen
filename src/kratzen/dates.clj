@@ -1,8 +1,19 @@
 (ns kratzen.dates
   (:import (java.sql Date)
-           (org.joda.time LocalDate))
+           (org.joda.time LocalDate DateTimeConstants DateTimeZone))
   (:require
-    [clj-time.core :as t]))
+    [clj-time.core :as t]
+    [clj-time.periodic :refer [periodic-seq]]))
+
+
+(defn every-day-at
+  "Create a periodic sequence corresponding to every day
+  at the specified hour"
+  [hour]
+  (->> (periodic-seq (.. (t/now)
+                         (withZone (DateTimeZone/forID "America/Chicago"))
+                         (withTime hour 0 0 0))
+                     (-> 1 t/days))))
 
 (defn sql-date
   "crete a java.sql.Date from year month day"
@@ -15,7 +26,6 @@
   ;;create a java.sql.Date from a joda LocalDate
   ;;
   ([date]
-
     (Date.
       (-> date
           (.toDateTimeAtStartOfDay)

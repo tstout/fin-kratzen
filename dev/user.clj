@@ -4,6 +4,7 @@
 ;;
 (ns user
   (:require [kratzen.system :as system]
+            [kratzen.dates :refer [every-day-at]]
             [kratzen.db :refer [pool-db-spec
                                 h2-local
                                 next-seq-val
