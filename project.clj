@@ -12,7 +12,7 @@
                            [racehub/om-bootstrap "0.5.3"]
                            [com.github.tstout/db-io "1.0.3" :exclusions [com.google.guava/guava]]
                            [com.github.tstout/ofx-io "0.1.1"]
-                           [com.github.tstout/gd-io "0.1.0-SNAPSHOT"]
+                           [com.github.tstout/gd-io "0.1.0"]
                            [com.h2database/h2 "1.3.175"]
                            [expectations "2.1.3"]
                            [judgr "0.3.0"]
