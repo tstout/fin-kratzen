@@ -29,3 +29,8 @@
   (chime-task
     (mk-chime-ch period)
     f))
+
+(defn task [pseq f]
+  (->
+    (chime-ch pseq)
+    (chime-task f)))

@@ -10,10 +10,10 @@
   "Create a periodic sequence corresponding to every day
   at the specified hour"
   [hour]
-  (->> (periodic-seq (.. (t/now)
+  (periodic-seq (.. (t/now)
                          (withZone (DateTimeZone/forID "America/Chicago"))
                          (withTime hour 0 0 0))
-                     (-> 1 t/days))))
+                     (-> 1 t/days)))
 
 (defn sql-date
   "crete a java.sql.Date from year month day"

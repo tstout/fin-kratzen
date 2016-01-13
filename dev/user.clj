@@ -9,7 +9,9 @@
                                 h2-local
                                 next-seq-val
                                 reset-seq]]
-            [kratzen.backup :refer [mk-backup local-backup-file]]
+            [kratzen.backup :refer [mk-backup local-backup-file trim-logs
+                                    legacy-backup-files
+                                    rm-old-backups]]
             [clojure.tools.namespace.repl :refer [refresh refresh-all]]
             [clojure.java.jdbc :as jdbc]
             [gd-io.protocols :refer [upload]]
