@@ -1,6 +1,6 @@
 (ns kratzen.cli
   (:require [clojure.string :as st])
-  (:require [kratzen.server :refer :all])
+  (:require [kratzen.system :refer :all])
   (:use [clojure.string :only [replace-first]])
   (:use [clojure.tools.logging :only (info error)]))
 

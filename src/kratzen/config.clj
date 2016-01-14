@@ -1,6 +1,7 @@
 (ns kratzen.config
   (:require [clojure.edn :as edn]
             [clojure.java.io :as io]))
+;;
 
 (defn load-config
   "Load configuration from ~/.fin-kratzen/config.clj

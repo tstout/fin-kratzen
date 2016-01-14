@@ -9,8 +9,9 @@
 ;;
 ;; Logging config via https://github.com/malcolmsparks/clj-logging-config
 ;;
-(def ^:private log-ns
+(def log-ns
   ["kratzen.db"
+   "kratzen.backup"
    "kratzen.server"
    "kratzen.http"
    "kratzen.boa"
@@ -22,7 +23,7 @@
 
 (defn- ev->db-col [ev]
   (let [ev-map (log-ev->map ev)]
-    {:when   (Date. ^long(:timeStamp ev-map))
+    {:when   (Date. ^long (:timeStamp ev-map))
      :logger (:loggerName ev-map)
      :level  (str (:level ev-map))
      :msg    (:message ev-map)
@@ -35,7 +36,9 @@
   (let [spec db-spec]
     (proxy [AppenderSkeleton] []
       (append [ev]
-        (jdbc/insert! spec :finkratzen.log (ev->db-col ev)))
+        (try
+          (jdbc/insert! spec :finkratzen.log (ev->db-col ev))
+          (catch Exception e (prn "Exception: " (.getMessage e)))))
 
       (close []
         nil))))

@@ -3,22 +3,51 @@
 ;; Define all your project dev conveniences here.
 ;;
 (ns user
-  (:require [kratzen.config :refer :all]
-            [kratzen.dates :refer :all]
-            [kratzen.model :refer :all]
-            [kratzen.boa :refer :all]
-            [kratzen.db :refer :all]
-            [kratzen.classifier :refer :all]
+  (:require [kratzen.system :as system]
+            [kratzen.dates :refer [every-day-at]]
+            [kratzen.db :refer [pool-db-spec
+                                h2-local
+                                next-seq-val
+                                reset-seq]]
+            [kratzen.backup :refer [mk-backup local-backup-file trim-logs
+                                    legacy-backup-files
+                                    rm-old-backups]]
+            [clojure.tools.namespace.repl :refer [refresh refresh-all]]
             [clojure.java.jdbc :as jdbc]
+            [gd-io.protocols :refer [upload]]
             [clj-time.core :as t]
-            [clojure.pprint :as pprint]
+            [clojure.pprint :refer [pprint]]
             [kratzen.http :as http]))
 
-;(println "-- loading custom settings from user.clj --")
-;
-;(defn load-db [test-data]
-;  (-> (mk-migrator h2-mem)
-;      (.update "/sql/init-schema.sql"))
-;  (save-boa h2-mem test-data))
+(println "-- loading custom settings from user.clj --")
 
+(def db (pool-db-spec h2-local))
 
+(def system nil)
+
+(defn init
+  "Constructs the dev system."
+  []
+  (alter-var-root #'system
+                  (constantly (system/system))))
+
+(defn start
+  "Starts the dev system."
+  []
+  (alter-var-root #'system system/start))
+
+(defn stop
+  "Shuts down and destroys dev system."
+  []
+  (alter-var-root #'system
+                  (fn [s] (when s (system/stop s)))))
+
+(defn go
+  "Initializes the current dev system and starts it."
+  []
+  (init)
+  (start))
+
+(defn reset []
+  (stop)
+  (refresh :after 'user/go))

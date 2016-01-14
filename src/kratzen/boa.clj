@@ -2,8 +2,11 @@
   (:import (ofx.client BoaData Retriever Credentials$Builder)
            (org.joda.time LocalDate))
   (:require [kratzen.config :refer :all]
-            [kratzen.dates :refer :all]
-            [kratzen.db :refer :all]
+            [kratzen.dates :refer [sql-date
+                                   days-before-now
+                                   mk-local-date
+                                   interval]]
+            [kratzen.db :refer [pool-db-spec h2-local]]
             [clojure.set :refer :all]
             [kratzen.model :refer :all]
             [kratzen.scheduler :refer [periodic-task]]
@@ -106,13 +109,17 @@
   component/Lifecycle
 
   (start [this]
+    (log/info "starting BOA Download periodic task...")
     (assoc this :boa-download
                 (periodic-task
                   interval-in-s
                   (fn [_] (download-and-save-stmts (pool-db-spec h2-local) 2)))))
 
   (stop [this]
-    (close! (:boa-download this))))
+    (log/info "Stopping BOA download")
+    (when-let [boa-ch (:boa-download this)]
+      (close! boa-ch))
+    (assoc this :boa-download nil)))
 
 (defn boa-download [interval-in-s]
   (map->BoaDownload {:interval-in-s interval-in-s}))
