@@ -4,7 +4,7 @@
             :license {:name "MIT"
                       :url  "http://opensource.org/licenses/MIT"}
             :dependencies [[org.clojure/clojure "1.7.0"]
-                           [org.clojure/clojurescript "1.7.107" :exclusions [org.clojure/clojure junit]]
+                           [org.clojure/clojurescript "1.7.228" :exclusions [org.clojure/clojure junit]]
                            [com.andrewmcveigh/cljs-time "0.3.11"]
                            [clj-logging-config "1.9.12"]
                            [ring/ring-core "1.4.0" :exclusions [org.clojure/tools.reader]]
@@ -35,7 +35,7 @@
             :hooks [leiningen.cljsbuild]
 
             :plugins [[lein-autoexpect "1.4.2"]
-                      [lein-cljsbuild "1.0.5"]
+                      [lein-cljsbuild "1.1.2"]
                       [lein-ring "0.9.3" :exclusions [org.clojure/clojure]]
                       [lein-expectations "0.0.7"]
                       [lein-figwheel "0.3.2" :exclusions [org.clojure/clojure org.codehaus.plexus/plexus-utils]]]
