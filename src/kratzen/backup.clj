@@ -7,8 +7,12 @@
             [kratzen.db :refer [next-seq-val pool-db-spec h2-local]]
             [kratzen.scheduler :refer [task]]
             [kratzen.dates :refer [every-day-at]]
-            [clojure.java.io :refer [file]])
+            [clojure.java.io :refer [file]]
+            [kratzen.config :refer [load-res]])
   (:import [com.stuartsierra.component Lifecycle]))
+
+(def sql
+  {:old-backups (load-res "select-old-backup.sql")})
 
 (def local-backup-file
   (format
@@ -20,13 +24,10 @@
     [conn db-spec]
     (jdbc/query
       conn
-      ["select
-          id
-          ,file_name
-       from
-         finkratzen.backup_files
-       where
-         RECORD_CREATED <= getdate() - 30"])))
+      [(:old-backups sql)])))
+
+
+;; TODO - need to remove old entries from BACKUP_FILES
 
 (defn rm-old-backups [db-spec]
   (let [gdrive (mk-gdrive)]
@@ -86,7 +87,7 @@
   (start [this]
     (log/info "Starting backup component...")
     (assoc this :backup (task
-                          (every-day-at 5)
+                          (every-day-at 7)
                           (fn [_] (upload-backup db-spec)))))
   (stop [this]
     (log/infof "Stopping backup component ...")
