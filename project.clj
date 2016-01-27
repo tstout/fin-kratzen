@@ -3,7 +3,7 @@
             :url "https://github.com/tstout/fin-kratzen"
             :license {:name "MIT"
                       :url  "http://opensource.org/licenses/MIT"}
-            :dependencies [[org.clojure/clojure "1.7.0"]
+            :dependencies [[org.clojure/clojure "1.8.0"]
                            [org.clojure/clojurescript "1.7.228" :exclusions [org.clojure/clojure junit]]
                            [com.andrewmcveigh/cljs-time "0.3.11"]
                            [clj-logging-config "1.9.12"]
