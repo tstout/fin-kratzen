@@ -1,6 +1,7 @@
 (ns kratzen.system
   (:require [kratzen.db :refer [->Database pool-db-spec h2-local]]
             [kratzen.boa :refer [boa-download]]
+            [kratzen.email :refer [->Email]]
             [kratzen.http :refer [->Http]]
             [kratzen.config :refer :all]
             [kratzen.classifier :refer :all]
@@ -35,23 +36,25 @@
               [:database])
     :boa-download (comp/using
                     (boa-download 3600)
-                    [:database])))
+                    [:database])
+    :email (comp/using (->Email)
+                       [:database])))
 
-(defn system [] (get-system conf))
+  (defn system [] (get-system conf))
 
-(defn start
-  "Performs side effects to initialize the system, acquire resources,
-  and start it running. Returns an updated instance of the system."
-  [system]
-  (comp/start system))
+  (defn start
+    "Performs side effects to initialize the system, acquire resources,
+    and start it running. Returns an updated instance of the system."
+    [system]
+    (comp/start system))
 
-(defn stop
-  "Performs side effects to shut down the system and release its
-  resources. Returns an updated instance of the system."
-  [system]
-  (comp/stop system))
+  (defn stop
+    "Performs side effects to shut down the system and release its
+    resources. Returns an updated instance of the system."
+    [system]
+    (comp/stop system))
 
-(defn run-service []
-  (log/info "Starting Service...")
-  (comp/start (system)))
+  (defn run-service []
+    (log/info "Starting Service...")
+    (comp/start (system)))
 

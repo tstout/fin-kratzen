@@ -13,7 +13,7 @@
                            [com.github.tstout/db-io "1.0.3" :exclusions [com.google.guava/guava]]
                            [com.github.tstout/ofx-io "0.1.1"]
                            [com.github.tstout/gd-io "0.1.0"]
-                           [com.h2database/h2 "1.3.175"]
+                           [com.draines/postal "1.11.3"]
                            [expectations "2.1.3"]
                            [judgr "0.3.0"]
                            [com.stuartsierra/component "0.2.3"]
