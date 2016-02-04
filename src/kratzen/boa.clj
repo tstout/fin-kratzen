@@ -2,6 +2,7 @@
   (:import (ofx.client BoaData Retriever Credentials$Builder)
            (org.joda.time LocalDate))
   (:require [kratzen.config :refer :all]
+            [clj-time.core :as t]
             [kratzen.dates :refer [sql-date
                                    days-before-now
                                    mk-local-date
@@ -17,8 +18,8 @@
 
 ;;
 ;; Load BOA credentials from cfg file...
-;;
-(def ^:private creds
+;; - TODO some destructuring here
+(def creds
   (let [cfg (:boa (load-config))]
     (-> (Credentials$Builder.)
         (.withUser (:user cfg))
@@ -26,6 +27,12 @@
         (.withRouting (:routing cfg))
         (.withAccount (:account cfg))
         (.build))))
+
+(defn balance[]
+  (-> (Retriever. (BoaData.) BoaData/CONTEXT creds)
+      (.fetch  (LocalDate/now) (LocalDate/now))
+      (.getAvailableBalance)
+      (.getAmount)))
 
 (defn ofx-to-map [transactions]
   (map
@@ -41,7 +48,6 @@
   [start end]
   (let [tran-list
         (-> (Retriever. (BoaData.) BoaData/CONTEXT creds)
-            (.installCustomTrustStore)
             (.fetch start end)
             (.getTransactionList))
         trans (if (nil? tran-list)

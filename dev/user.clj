@@ -4,7 +4,24 @@
 ;;
 (ns user
   (:require [kratzen.system :as system]
-            [kratzen.dates :refer [every-day-at]]
+            [kratzen.scheduler :refer [task]]
+            [kratzen.reports :refer [boa-stmts-week
+                                     mk-weekly-summary
+                                     week-credits
+                                     max-amount
+                                     week-debits]]
+            [kratzen.boa :refer [creds
+                                 download-boa-stmts
+                                 balance
+                                 ofx-fetch]]
+            [kratzen.config :refer [load-config]]
+            [kratzen.dates :refer [every-day-at
+                                   every-x-minutes
+                                   days-before-now
+                                   days-ago]]
+            [kratzen.email :refer [daily-summary-template
+                                   send-daily-summary
+                                   mk-summary-email]]
             [kratzen.db :refer [pool-db-spec
                                 h2-local
                                 next-seq-val
@@ -17,7 +34,9 @@
             [gd-io.protocols :refer [upload]]
             [clj-time.core :as t]
             [clojure.pprint :refer [pprint]]
-            [kratzen.http :as http]))
+            [kratzen.http :as http]
+            [kratzen.dates :refer [interval]]
+            [kratzen.email :refer [send-email]]))
 
 (println "-- loading custom settings from user.clj --")
 

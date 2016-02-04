@@ -16,7 +16,8 @@
    "kratzen.http"
    "kratzen.boa"
    "kratzen.scheduler"
-   "kratzen.model"])
+   "kratzen.model"
+   "kratzen.email"])
 
 (defn- log-ev->map [ev]
   (assoc (bean ev) :event ev))

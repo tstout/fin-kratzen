@@ -1,10 +1,10 @@
-(defproject com.github.tstout/fin-kratzen "0.1.0"
+(defproject com.github.tstout/fin-kratzen "0.1.1"
             :description "Financial Scraper"
             :url "https://github.com/tstout/fin-kratzen"
             :license {:name "MIT"
                       :url  "http://opensource.org/licenses/MIT"}
-            :dependencies [[org.clojure/clojure "1.7.0"]
-                           [org.clojure/clojurescript "1.7.107" :exclusions [org.clojure/clojure junit]]
+            :dependencies [[org.clojure/clojure "1.8.0"]
+                           [org.clojure/clojurescript "1.7.228" :exclusions [org.clojure/clojure junit]]
                            [com.andrewmcveigh/cljs-time "0.3.11"]
                            [clj-logging-config "1.9.12"]
                            [ring/ring-core "1.4.0" :exclusions [org.clojure/tools.reader]]
@@ -13,7 +13,7 @@
                            [com.github.tstout/db-io "1.0.3" :exclusions [com.google.guava/guava]]
                            [com.github.tstout/ofx-io "0.1.1"]
                            [com.github.tstout/gd-io "0.1.0"]
-                           [com.h2database/h2 "1.3.175"]
+                           [com.draines/postal "1.11.3"]
                            [expectations "2.1.3"]
                            [judgr "0.3.0"]
                            [com.stuartsierra/component "0.2.3"]
@@ -24,7 +24,7 @@
                            [jarohen/chime "0.1.6"]
                            [org.omcljs/om "0.9.0"]
                            [org.clojure/tools.logging "0.3.1"]
-                           [org.clojure/core.async "0.1.346.0-17112a-alpha"]
+                           [org.clojure/core.async "0.2.374"]
                            [org.clojure/data.json "0.2.6"]
                            [org.slf4j/slf4j-log4j12 "1.7.12"]
                            [log4j/log4j "1.2.17" :exclusions [javax.mail/mails
@@ -35,7 +35,7 @@
             :hooks [leiningen.cljsbuild]
 
             :plugins [[lein-autoexpect "1.4.2"]
-                      [lein-cljsbuild "1.0.5"]
+                      [lein-cljsbuild "1.1.2"]
                       [lein-ring "0.9.3" :exclusions [org.clojure/clojure]]
                       [lein-expectations "0.0.7"]
                       [lein-figwheel "0.3.2" :exclusions [org.clojure/clojure org.codehaus.plexus/plexus-utils]]]

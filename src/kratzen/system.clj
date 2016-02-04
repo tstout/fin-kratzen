@@ -1,6 +1,7 @@
 (ns kratzen.system
   (:require [kratzen.db :refer [->Database pool-db-spec h2-local]]
             [kratzen.boa :refer [boa-download]]
+            [kratzen.email :refer [->Email]]
             [kratzen.http :refer [->Http]]
             [kratzen.config :refer :all]
             [kratzen.classifier :refer :all]
@@ -28,14 +29,16 @@
                [:database])
     :classifier (comp/using
                   (->BayesClassifier (:db-spec conf))
-                  [:database])
-    :http (->Http)
+                  [:database :logging])
+    :http (comp/using (->Http) [:logging])
     :backup (comp/using
               (->Backup (:db-spec conf))
-              [:database])
+              [:database :logging])
     :boa-download (comp/using
                     (boa-download 3600)
-                    [:database])))
+                    [:database :logging])
+    :email (comp/using (->Email)
+                       [:database :logging])))
 
 (defn system [] (get-system conf))
 
