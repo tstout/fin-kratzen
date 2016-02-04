@@ -4,6 +4,7 @@
 ;;
 (ns user
   (:require [kratzen.system :as system]
+            [kratzen.scheduler :refer [task]]
             [kratzen.reports :refer [boa-stmts-week
                                      mk-weekly-summary
                                      week-credits
@@ -15,6 +16,7 @@
                                  ofx-fetch]]
             [kratzen.config :refer [load-config]]
             [kratzen.dates :refer [every-day-at
+                                   every-x-minutes
                                    days-before-now
                                    days-ago]]
             [kratzen.email :refer [daily-summary-template

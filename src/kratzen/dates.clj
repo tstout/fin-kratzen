@@ -23,6 +23,13 @@
                     (withTime hour 0 0 0))
                 (-> 1 t/days)))
 
+(defn every-x-minutes
+  "Create a periodic sequence corresponding to the supplied
+  number of minutes"
+  [x]
+  (periodic-seq (t/now)
+                (-> x t/minutes)))
+
 (defn sql-date
   "crete a java.sql.Date from year month day"
   ([year month day]
