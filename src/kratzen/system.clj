@@ -29,16 +29,16 @@
                [:database])
     :classifier (comp/using
                   (->BayesClassifier (:db-spec conf))
-                  [:database])
-    :http (->Http)
+                  [:database :logging])
+    :http (comp/using (->Http) [:logging])
     :backup (comp/using
               (->Backup (:db-spec conf))
-              [:database])
+              [:database :logging])
     :boa-download (comp/using
                     (boa-download 3600)
-                    [:database])
+                    [:database :logging])
     :email (comp/using (->Email)
-                       [:database])))
+                       [:database :logging])))
 
 (defn system [] (get-system conf))
 
