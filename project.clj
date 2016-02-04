@@ -1,4 +1,4 @@
-(defproject com.github.tstout/fin-kratzen "0.1.0"
+(defproject com.github.tstout/fin-kratzen "0.1.1"
             :description "Financial Scraper"
             :url "https://github.com/tstout/fin-kratzen"
             :license {:name "MIT"
