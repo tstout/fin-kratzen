@@ -14,7 +14,7 @@
                                  download-boa-stmts
                                  balance
                                  ofx-fetch]]
-            [kratzen.config :refer [load-config]]
+            [kratzen.config :refer [load-config load-edn-resource]]
             [kratzen.dates :refer [every-day-at
                                    every-x-minutes
                                    days-before-now

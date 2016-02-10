@@ -4,6 +4,7 @@
            (org.joda.time Period)
            (org.eclipse.jetty.server Server))
   (:require [clj-time.core :as t]
+            [kratzen.meta :refer [kratzen-version]]
             [ring.util.response :as resp]
             [kratzen.config :refer [load-res]]
             [clojure.data.json :as json]
@@ -61,7 +62,8 @@
 
 (defmethod controller "ping" [_]
   (mk-response (json/write-str {:uptime (uptime)
-                                :uptime-in-s (uptime-in-seconds)})))
+                                :uptime-in-s (uptime-in-seconds)
+                                :version (kratzen-version)})))
 
 (defmethod controller :default [req]
   (log/info "default controller case..." req)
