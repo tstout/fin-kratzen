@@ -24,6 +24,7 @@
                                    send-daily-summary
                                    mk-summary-email]]
             [kratzen.db :refer [pool-db-spec
+                                run-query
                                 h2-local
                                 next-seq-val
                                 reset-seq]]

@@ -13,16 +13,6 @@
             [kratzen.dates :refer [every-day-at
                                    every-x-minutes]]))
 
-;(defn daily-summary-template []
-;  (str
-;    (format "Financial Summary for Today, %s\n"
-;            (tm-format (t/now)))
-;    "-------------------------------------------------
-;          Credits:%-20s
-;           Debits:%-20s
-;  Current Balance:%-20s"))
-
-
 (defn daily-summary-template [totals txns]
   (str
     (format "Financial Summary for Today, %s\n"
