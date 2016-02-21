@@ -4,12 +4,18 @@
             [kratzen.db :refer [h2-local pool-db-spec]]))
 
 (def sql
-  {:week-stmts (load-res "select-boa-last-7-days.sql")})
+  {:week-stmts (load-res "select-boa-last-7-days.sql")
+   :most-recent (load-res "select-boa-most-recent.sql")})
 
 (defn boa-stmts-week []
   (jdbc/with-db-connection
     [conn (pool-db-spec h2-local)]
     (jdbc/query conn [(:week-stmts sql)])))
+
+(defn boa-recent-stmts []
+  (jdbc/with-db-connection
+    [conn (pool-db-spec h2-local)]
+    (jdbc/query conn [(:most-recent sql)])))
 
 (defn week-credits [stmts]
   (filter #(< 0 (:amount %)) stmts))
