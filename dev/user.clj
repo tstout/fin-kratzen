@@ -7,6 +7,7 @@
             [kratzen.scheduler :refer [task]]
             [kratzen.reports :refer [boa-stmts-week
                                      mk-weekly-summary
+                                     boa-recent-stmts
                                      week-credits
                                      max-amount
                                      week-debits]]
@@ -23,6 +24,7 @@
                                    send-daily-summary
                                    mk-summary-email]]
             [kratzen.db :refer [pool-db-spec
+                                run-query
                                 h2-local
                                 next-seq-val
                                 reset-seq]]
@@ -33,7 +35,7 @@
             [clojure.java.jdbc :as jdbc]
             [gd-io.protocols :refer [upload]]
             [clj-time.core :as t]
-            [clojure.pprint :refer [pprint]]
+            [clojure.pprint :refer [pprint print-table]]
             [kratzen.http :as http]
             [kratzen.dates :refer [interval]]
             [kratzen.email :refer [send-email]]))

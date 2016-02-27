@@ -1,32 +1,33 @@
 (ns kratzen.email
   (:require [kratzen.config :refer [load-edn-resource load-config]]
-            [kratzen.reports :refer [mk-weekly-summary]]
+            [kratzen.reports :refer [mk-weekly-summary boa-recent-stmts]]
             [kratzen.boa :refer [balance]]
             [com.stuartsierra.component :as component]
             [clj-time.core :as t]
             [clojure.core.async :refer [close!]]
             [kratzen.scheduler :refer [task]]
+            [clojure.pprint :refer [pprint print-table]]
             [clojure.tools.logging :as log]
             [kratzen.dates :refer [tm-format]]
             [postal.core :refer [send-message]]
             [kratzen.dates :refer [every-day-at
                                    every-x-minutes]]))
 
-(defn daily-summary-template []
+(defn daily-summary-template [totals txns]
   (str
     (format "Financial Summary for Today, %s\n"
             (tm-format (t/now)))
-    "-------------------------------------------------
-  Credits:         %-20s
-  Debits:          %-20s
-  Current Balance: %-20s"))
+    (with-out-str
+      (print-table totals)
+      (print-table txns))))
 
 (defn mk-summary-email [summary]
   (let [{:keys [credits debits]} summary]
-    (format (daily-summary-template)
-            credits
-            debits
-            (balance))))
+    (daily-summary-template
+      [{:balance (balance)
+        :credits credits
+        :debits  debits}]
+      (boa-recent-stmts))))
 
 (defn send-email [body]
   (let [{:keys [user pass]} (:email (load-config))]

@@ -104,6 +104,11 @@
 (def schema-files ["/sql/init-schema.sql"
                    "/sql/backup-schema.sql"])
 
+(defn run-query [sql]
+  (jdbc/with-db-connection
+    [conn (pool-db-spec h2-local)]
+    (jdbc/query conn [sql])))
+
 (defrecord Database []
   component/Lifecycle
 
