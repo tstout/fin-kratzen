@@ -28,7 +28,10 @@
                                 h2-local
                                 next-seq-val
                                 reset-seq]]
-            [kratzen.backup :refer [mk-backup local-backup-file trim-logs
+            [kratzen.backup :refer [mk-backup
+                                    local-backup-file
+                                    trim-logs
+                                    upload-backup
                                     legacy-backup-files
                                     rm-old-backups]]
             [clojure.tools.namespace.repl :refer [refresh refresh-all]]
