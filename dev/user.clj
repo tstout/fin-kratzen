@@ -29,11 +29,13 @@
                                 next-seq-val
                                 reset-seq]]
             [kratzen.backup :refer [mk-backup
+                                    rm-backup-meta
                                     local-backup-file
                                     trim-logs
                                     upload-backup
                                     legacy-backup-files
-                                    rm-old-backups]]
+                                    rm-old-backups
+                                    ]]
             [clojure.tools.namespace.repl :refer [refresh refresh-all]]
             [clojure.java.jdbc :as jdbc]
             [gd-io.protocols :refer [upload]]

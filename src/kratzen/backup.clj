@@ -26,14 +26,17 @@
       conn
       [(:old-backups sql)])))
 
-
-;; TODO - need to remove old entries from BACKUP_FILES
+(defn rm-backup-meta [id db-spec]
+  (jdbc/with-db-connection
+    [conn db-spec]
+    (jdbc/delete! conn :finkratzen.backup_files ["ID = ?" id])))
 
 (defn rm-old-backups [db-spec]
   (let [gdrive (mk-gdrive)]
     (doseq [{:keys [id file_name]} (legacy-backup-files db-spec)]
       (log/infof "deleting backup file %s" file_name)
-      (rm gdrive id))))
+      (rm gdrive id)
+      (rm-backup-meta id db-spec))))
 
 (defn mk-backup
   "Create a backup zip of the H2 database"
@@ -47,6 +50,8 @@
     "fk-backup-%d.zip"
     (next-seq-val (pool-db-spec h2-local) "FINKRATZEN.BACKUP_SEQ")))
 
+;; TODO - this belongs in logging namespace
+;; TODO - create a fn wrapping with-db-connection/pool-db-spec
 (defn trim-logs []
   (jdbc/with-db-connection
     [conn (pool-db-spec h2-local)]
