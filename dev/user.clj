@@ -11,11 +11,10 @@
                                      week-credits
                                      max-amount
                                      week-debits]]
-            [kratzen.boa :refer [creds
-                                 download-boa-stmts
+            [kratzen.boa :refer [download-boa-stmts
                                  balance
                                  ofx-fetch]]
-            [kratzen.config :refer [load-config load-edn-resource]]
+            [kratzen.config :as cfg]
             [kratzen.dates :refer [every-day-at
                                    every-x-minutes
                                    days-before-now
@@ -40,9 +39,12 @@
             [clojure.java.jdbc :as jdbc]
             [gd-io.protocols :refer [upload]]
             [clj-time.core :as t]
+            [clj-time.format :as tf]
             [clojure.pprint :refer [pprint print-table]]
             [kratzen.http :as http]
             [kratzen.dates :refer [interval]]
+            [kratzen.boa-ofx :as ofx]
+            [kratzen.boa :as boa]
             [kratzen.email :refer [send-email]]))
 
 (println "-- loading custom settings from user.clj --")

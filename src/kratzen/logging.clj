@@ -22,6 +22,7 @@
 (defn- log-ev->map [ev]
   (assoc (bean ev) :event ev))
 
+;; TODO - use some destructuring here
 (defn- ev->db-col [ev]
   (let [ev-map (log-ev->map ev)]
     {:when   (Date. ^long (:timeStamp ev-map))
@@ -31,6 +32,10 @@
      :thread (:threadName ev-map)
      :ndc    (:NDC ev-map)}))
 
+;;
+;; TODO - this is ultimately using a pooled DB connection
+;; but never returning the connection to the pool, fix this.
+;;
 (defn mk-db-appender
   "Create a log4j database Appender"
   [db-spec]

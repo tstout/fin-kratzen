@@ -19,14 +19,15 @@
 ;;
 ;; Load BOA credentials from cfg file...
 ;; - TODO some destructuring here
-(def creds
-  (let [cfg (:boa (load-config))]
-    (-> (Credentials$Builder.)
-        (.withUser (:user cfg))
-        (.withPass (:pass cfg))
-        (.withRouting (:routing cfg))
-        (.withAccount (:account cfg))
-        (.build))))
+;(def creds
+;  (let [cfg (:boa (load-config))]
+;    (-> (Credentials$Builder.)
+;        (.withUser (:user cfg))
+;        (.withPass (:pass cfg))
+;        (.withRouting (:routing cfg))
+;        (.withAccount (:account cfg))
+;        (.build))))
+
 
 (defn balance[]
   (-> (Retriever. (BoaData.) BoaData/CONTEXT creds)

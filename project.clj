@@ -14,6 +14,7 @@
                  [com.github.tstout/ofx-io "0.1.1"]
                  [com.github.tstout/gd-io "0.1.0"]
                  [com.draines/postal "1.11.3"]
+                 [clj-http "3.7.0"]
                  [expectations "2.1.3"]
                  [trptcolin/versioneer "0.2.0"]
                  [judgr "0.3.0"]

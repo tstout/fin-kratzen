@@ -24,4 +24,5 @@
        slurp
        edn/read-string))
 
-
+(def creds
+  (memoize (fn [] (:boa (load-config)))))
