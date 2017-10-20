@@ -3,9 +3,12 @@
             [clj-time.format :as tf]
             [clj-time.core :as t]
             [kratzen.dates :refer [days-ago]]
-            [kratzen.config :as cfg])
+            [kratzen.config :as cfg]
+            [clojure.java.io :as io])
   (:import (org.joda.time DateTimeZone)
-           (java.util UUID)))
+           (java.util UUID)
+           (net.sf.ofx4j.domain.data ResponseEnvelope MessageSetType)
+           (net.sf.ofx4j.io AggregateUnmarshaller)))
 
 (def req-template
   "
@@ -132,10 +135,55 @@
                         "User-Agent"   "InetClntApp/3.0"}}))
 
 (defn fetch-trn
-  "Fetch transactions for current date - days"
+  "Fetch transactions for current date - days.
+  Returns a raw OFX SGML response."
   [days]
   (->>
     days
     (ofx-date-range {})
     (merge (cfg/creds))
-    fetch-records))
+    fetch-records
+    :body))
+
+(defn read-response
+  "Use the OFX4J library to parse the SGML response"
+  [resp]
+  (with-open [data (io/input-stream (.getBytes resp))]
+    (->
+      (.unmarshal (AggregateUnmarshaller. ResponseEnvelope) data)
+      (.getMessageSet MessageSetType/banking)
+      (.getStatementResponses))))
+
+;; getAvailableBalance at same level as getTransactionList contains
+;; balance
+
+(defn extract-trans
+  "Grab the transactions from the ofx java objects."
+  [m]
+  (merge m
+         {:transactions
+          (->>
+            (m :bank-trans)
+            (.getTransactionList)
+            (.getTransactions)
+            (map bean))}))
+
+(defn extract-balance
+  "Grab the balance from the ofx java object"
+  [m]
+  (merge m {:balance
+            (->
+              (m :bank-trans)
+              (.getAvailableBalance)
+              bean)}))
+
+(defn query-boa [days]
+  (->>
+    days
+    fetch-trn
+    read-response
+    first
+    (.getMessage)
+    (assoc {} :bank-trans)
+    extract-trans
+    extract-balance))

@@ -29,6 +29,7 @@
                  [org.clojure/core.async "0.2.374"]
                  [org.clojure/data.json "0.2.6"]
                  [org.slf4j/slf4j-log4j12 "1.7.12"]
+                 [net.sf.ofx4j/ofx4j "1.6"]
                  [log4j/log4j "1.2.17" :exclusions [javax.mail/mails
                                                     javax.jms/jms
                                                     com.sun.jmdk/jmxtools
