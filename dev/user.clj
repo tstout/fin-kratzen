@@ -11,8 +11,7 @@
                                      week-credits
                                      max-amount
                                      week-debits]]
-            [kratzen.boa :refer [download-boa-stmts
-                                 balance
+            [kratzen.boa :refer [balance
                                  ofx-fetch]]
             [kratzen.config :as cfg]
             [kratzen.dates :refer [every-day-at
