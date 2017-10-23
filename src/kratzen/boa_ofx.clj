@@ -97,12 +97,6 @@
       (fn [t kv] (let [[k v] kv] (.replace t k v)))
       template)))
 
-;(defn mk-creds [m]
-;  (merge m
-;         (select-keys
-;           (cfg/creds)
-;           [user pass account routing client-id])))
-
 (defn build-req
   "Create an OFX SGML request based on the supplied map of parameters."
   [parms]

@@ -18,10 +18,7 @@
             [clojure.tools.logging :as log]))
 
 (defn balance[]
-  (-> (Retriever. (BoaData.) BoaData/CONTEXT creds)
-      (.fetch  (LocalDate/now) (LocalDate/now))
-      (.getAvailableBalance)
-      (.getAmount)))
+  (get-in (query-boa 3) [:balance :amount]))
 
 (defn ofx-to-map [resp]
   (let [{:keys [balance transactions]} resp]
