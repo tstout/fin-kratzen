@@ -1,6 +1,5 @@
 (ns kratzen.boa
-  (:import (ofx.client BoaData Retriever Credentials$Builder)
-           (org.joda.time LocalDate))
+  (:import (org.joda.time LocalDate))
   (:require [kratzen.config :refer :all]
             [clj-time.core :as t]
             [kratzen.dates :refer [sql-date

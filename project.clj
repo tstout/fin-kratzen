@@ -11,7 +11,6 @@
                  [ring/ring-jetty-adapter "1.4.0"]
                  [racehub/om-bootstrap "0.5.3"]
                  [com.github.tstout/db-io "1.0.3" :exclusions [com.google.guava/guava]]
-                 [com.github.tstout/ofx-io "0.1.1"]
                  [com.github.tstout/gd-io "0.1.0"]
                  [com.draines/postal "1.11.3"]
                  [clj-http "3.7.0"]
