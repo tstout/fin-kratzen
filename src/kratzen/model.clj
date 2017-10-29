@@ -2,6 +2,7 @@
   (:require [kratzen.config :refer :all]
             [kratzen.dates :refer :all]
             [clojure.walk :refer :all]
+            [clojure.stacktrace :as st]
             [kratzen.db :refer :all]
             [clojure.java.jdbc :as jdbc]
             [clojure.tools.logging :as log]))
@@ -32,7 +33,9 @@
     [conn db]
     (doseq [record records]
       (log/info "Saving " record)
-      (jdbc/insert! conn :finkratzen.boa_checking record))))
+      (try
+        (jdbc/insert! conn :finkratzen.boa_checking record)
+        (catch Throwable e (log/error (str (st/root-cause e)) ""))))))
 
 ;;
 (defn to-clj-map
