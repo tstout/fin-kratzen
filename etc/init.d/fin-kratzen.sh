@@ -14,7 +14,7 @@
 # sudo /usr/sbin/update-rc.d -f fin-kratzen.sh defaults
 
 WORK_DIR="/home/pi/fin-kratzen"
-JAR="fin-kratzen-0.1.3-standalone.jar"
+JAR="fin-kratzen-0.1.4-standalone.jar"
 USER="pi"
 DAEMON="/usr/bin/java"
 DAEMON_ARGS="-server \
@@ -23,7 +23,6 @@ DAEMON_ARGS="-server \
 -Dcom.sun.management.jmxremote.authenticate=false \
 -Dcom.sun.management.jmxremote.ssl=false \
 -Djava.rmi.server.hostname=stout-pi.local \
--Dclojure.server.repl=\"{:port 5555 :accept clojure.core.server/repl}\" \
 -jar $WORK_DIR/$JAR --server"
 
 start () {

@@ -59,6 +59,6 @@
 
 (defn run-service []
   (log/info "Starting Service...")
-  (reset! repl-server (start-server :port 4576))
+  (reset! repl-server (start-server :port 4576 :bind "0.0.0.0"))
   (comp/start (system)))
 
