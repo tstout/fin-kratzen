@@ -1,4 +1,4 @@
-(defproject com.github.tstout/fin-kratzen "0.1.3"
+(defproject com.github.tstout/fin-kratzen "0.1.4"
   :description "Financial Scraper"
   :url "https://github.com/tstout/fin-kratzen"
   :license {:name "MIT"
@@ -6,14 +6,15 @@
   :dependencies [[org.clojure/clojure "1.8.0"]
                  [org.clojure/clojurescript "1.7.228" :exclusions [org.clojure/clojure junit]]
                  [com.andrewmcveigh/cljs-time "0.3.11"]
+                 [org.clojure/tools.nrepl "0.2.12"]
                  [clj-logging-config "1.9.12"]
                  [ring/ring-core "1.4.0" :exclusions [org.clojure/tools.reader]]
                  [ring/ring-jetty-adapter "1.4.0"]
                  [racehub/om-bootstrap "0.5.3"]
                  [com.github.tstout/db-io "1.0.3" :exclusions [com.google.guava/guava]]
-                 [com.github.tstout/ofx-io "0.1.1"]
                  [com.github.tstout/gd-io "0.1.0"]
                  [com.draines/postal "1.11.3"]
+                 [clj-http "3.7.0"]
                  [expectations "2.1.3"]
                  [trptcolin/versioneer "0.2.0"]
                  [judgr "0.3.0"]
@@ -28,6 +29,7 @@
                  [org.clojure/core.async "0.2.374"]
                  [org.clojure/data.json "0.2.6"]
                  [org.slf4j/slf4j-log4j12 "1.7.12"]
+                 [net.sf.ofx4j/ofx4j "1.6"]
                  [log4j/log4j "1.2.17" :exclusions [javax.mail/mails
                                                     javax.jms/jms
                                                     com.sun.jmdk/jmxtools

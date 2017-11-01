@@ -5,47 +5,26 @@
 (ns user
   (:require [kratzen.system :as system]
             [kratzen.scheduler :refer [task]]
-            [kratzen.reports :refer [boa-stmts-week
-                                     mk-weekly-summary
-                                     boa-recent-stmts
-                                     week-credits
-                                     max-amount
-                                     week-debits]]
-            [kratzen.boa :refer [creds
-                                 download-boa-stmts
-                                 balance
-                                 ofx-fetch]]
-            [kratzen.config :refer [load-config load-edn-resource]]
-            [kratzen.dates :refer [every-day-at
-                                   every-x-minutes
-                                   days-before-now
-                                   days-ago]]
-            [kratzen.email :refer [daily-summary-template
-                                   send-daily-summary
-                                   mk-summary-email]]
-            [kratzen.db :refer [pool-db-spec
-                                run-query
-                                h2-local
-                                next-seq-val
-                                reset-seq]]
-            [kratzen.backup :refer [mk-backup
-                                    rm-backup-meta
-                                    local-backup-file
-                                    trim-logs
-                                    upload-backup
-                                    legacy-backup-files
-                                    rm-old-backups
-                                    ]]
+            [kratzen.config :as cfg]
+            [kratzen.db :refer [pool-db-spec h2-local]]
             [clojure.tools.namespace.repl :refer [refresh refresh-all]]
             [clojure.java.jdbc :as jdbc]
             [gd-io.protocols :refer [upload]]
             [clj-time.core :as t]
+            [clj-time.format :as tf]
             [clojure.pprint :refer [pprint print-table]]
             [kratzen.http :as http]
             [kratzen.dates :refer [interval]]
+            [kratzen.boa-ofx :as ofx]
+            [kratzen.boa :as boa]
             [kratzen.email :refer [send-email]]))
 
 (println "-- loading custom settings from user.clj --")
+
+(defn load-vars []
+  (require '[kratzen.boa-ofx :as ofx]
+           '[kratzen.boa :as boa]))
+
 
 (def db (pool-db-spec h2-local))
 
