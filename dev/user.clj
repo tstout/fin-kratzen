@@ -17,7 +17,9 @@
             [kratzen.dates :refer [interval]]
             [kratzen.boa-ofx :as ofx]
             [kratzen.boa :as boa]
-            [kratzen.email :refer [send-email]]))
+            [kratzen.email :refer [send-email]]
+            [kratzen.db :as db]
+            [kratzen.dates :as dates]))
 
 (println "-- loading custom settings from user.clj --")
 
