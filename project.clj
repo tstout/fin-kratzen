@@ -21,7 +21,7 @@
                  [com.stuartsierra/component "0.2.3"]
                  [clj-time "0.11.0"]
                  [org.clojure/java.jdbc "0.4.1"]
-                 [com.h2database/h2 "1.3.176"]
+                 [com.h2database/h2 "1.4.196"]
                  [sablono "0.3.4"]
                  [jarohen/chime "0.1.6"]
                  [org.omcljs/om "0.9.0"]
@@ -35,6 +35,7 @@
                                                     com.sun.jmdk/jmxtools
                                                     com.sun.jmx/jmxri]]]
   :uberjar-exclusions [#"expectations*" #"junit*"]
+  :uberjar-name "fin-kratzen.jar"
   :hooks [leiningen.cljsbuild]
 
   :plugins [[lein-autoexpect "1.4.2"]

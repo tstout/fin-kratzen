@@ -14,7 +14,7 @@
 # sudo /usr/sbin/update-rc.d -f fin-kratzen.sh defaults
 
 WORK_DIR="/home/pi/fin-kratzen"
-JAR="fin-kratzen-0.1.4-standalone.jar"
+JAR="fin-kratzen.jar"
 USER="pi"
 DAEMON="/usr/bin/java"
 DAEMON_ARGS="-server \
