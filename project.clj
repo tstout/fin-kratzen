@@ -3,15 +3,16 @@
   :url "https://github.com/tstout/fin-kratzen"
   :license {:name "MIT"
             :url  "http://opensource.org/licenses/MIT"}
-  :dependencies [[org.clojure/clojure "1.8.0"]
-                 [org.clojure/clojurescript "1.7.228" :exclusions [org.clojure/clojure junit]]
+  :dependencies [[org.clojure/clojure "1.9.0"]
+                 [org.clojure/clojurescript "1.9.229" :exclusions [org.clojure/clojure junit]]
                  [com.andrewmcveigh/cljs-time "0.3.11"]
                  [org.clojure/tools.nrepl "0.2.12"]
                  [clj-logging-config "1.9.12"]
                  [ring/ring-core "1.4.0" :exclusions [org.clojure/tools.reader]]
                  [ring/ring-jetty-adapter "1.4.0"]
+                 [com.google.guava/guava "23.5-jre"]
                  [com.github.tstout/db-io "1.0.3" :exclusions [com.google.guava/guava]]
-                 [com.github.tstout/gd-io "0.1.0"]
+                 [com.github.tstout/gd-io "0.1.0" :exclusions [clj-http]]
                  [com.draines/postal "1.11.3"]
                  [clj-http "3.7.0"]
                  [expectations "2.1.3"]
@@ -21,10 +22,9 @@
                  [clj-time "0.11.0"]
                  [org.clojure/java.jdbc "0.4.1"]
                  [com.h2database/h2 "1.4.196"]
-                 [sablono "0.3.4"]
                  [jarohen/chime "0.1.6"]
                  [org.clojure/tools.logging "0.3.1"]
-                 [org.clojure/core.async "0.2.374"]
+                 [org.clojure/core.async "0.3.465"]
                  [org.clojure/data.json "0.2.6"]
                  [org.slf4j/slf4j-log4j12 "1.7.12"]
                  [net.sf.ofx4j/ofx4j "1.6"]
@@ -37,10 +37,10 @@
   :hooks [leiningen.cljsbuild]
 
   :plugins [[lein-autoexpect "1.4.2"]
-            [lein-cljsbuild "1.1.2"]
+            [lein-cljsbuild "1.1.7"]
             [lein-ring "0.9.3" :exclusions [org.clojure/clojure]]
             [lein-expectations "0.0.7"]
-            [lein-figwheel "0.3.2" :exclusions [org.clojure/clojure org.codehaus.plexus/plexus-utils]]]
+            [lein-figwheel "0.5.14" :exclusions [org.clojure/clojure org.codehaus.plexus/plexus-utils]]]
 
   ;;:source-paths ["src"]
   ;;
