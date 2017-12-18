@@ -156,7 +156,7 @@
   [m]
   (merge m
          {:transactions
-          (->>
+          (some->>
             (m :bank-trans)
             (.getTransactionList)
             (.getTransactions)
@@ -166,7 +166,7 @@
   "Grab the balance from the ofx java object"
   [m]
   (merge m {:balance
-            (->
+            (some->
               (m :bank-trans)
               (.getAvailableBalance)
               bean)}))
