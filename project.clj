@@ -21,7 +21,7 @@
                  [com.stuartsierra/component "0.3.2"]
                  [clj-time "0.14.2"]
                  [org.clojure/java.jdbc "0.7.4"]
-                 [com.h2database/h2 "1.4.196"]
+                 [com.h2database/h2 "1.4.197"]
                  [jarohen/chime "0.2.2"]
                  [org.clojure/tools.logging "0.4.0"]
                  [org.clojure/core.async "0.3.465"]
