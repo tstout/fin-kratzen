@@ -30,6 +30,7 @@
         boa (:boa cfg)]
     (zipmap [:user :pass] [(:db-user boa) (:db-pass boa)])))
 
+
 (defn db-conn-factory
   "Create a DB connection factory using db.io"
   [db-vendor]
