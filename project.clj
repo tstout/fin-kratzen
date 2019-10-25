@@ -6,7 +6,7 @@
   :dependencies [[org.clojure/clojure "1.10.0"]
                  [org.clojure/clojurescript "1.9.229" :exclusions [org.clojure/clojure junit]]
                  [com.andrewmcveigh/cljs-time "0.5.2"]
-                 [org.clojure/tools.nrepl "0.2.13"]
+                 [nrepl "0.6.0"]
                  [clj-logging-config "1.9.12"]
                  [ring/ring-core "1.6.3" :exclusions [org.clojure/tools.reader]]
                  [ring/ring-jetty-adapter "1.6.3"]
