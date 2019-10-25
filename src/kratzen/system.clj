@@ -8,7 +8,7 @@
             [kratzen.logging :refer [->Logger]]
             [kratzen.channels :refer :all]
             [clojure.tools.logging :refer [info error]]
-            [clojure.tools.nrepl.server :refer (start-server stop-server)])
+            [nrepl.server :refer (start-server stop-server)])
 
   (:require [kratzen.scheduler :refer :all]
             [com.stuartsierra.component :as comp]
