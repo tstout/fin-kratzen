@@ -10,3 +10,5 @@ pom.xml.asc
 .idea
 *.iml
 *.ipr
+.clj-kondo
+resources/public/js/compiled

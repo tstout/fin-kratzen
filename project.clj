@@ -4,14 +4,14 @@
   :license {:name "MIT"
             :url  "http://opensource.org/licenses/MIT"}
   :dependencies [[org.clojure/clojure "1.10.0"]
-                 [org.clojure/clojurescript "1.9.229" :exclusions [org.clojure/clojure junit]]
+                 [org.clojure/clojurescript "1.11.4" :exclusions [org.clojure/clojure junit]]
                  [com.andrewmcveigh/cljs-time "0.5.2"]
                  [nrepl "0.6.0"]
                  [clj-logging-config "1.9.12"]
                  [ring/ring-core "1.6.3" :exclusions [org.clojure/tools.reader]]
                  [ring/ring-jetty-adapter "1.6.3"]
                  [com.google.guava/guava "23.5-jre"]
-                 [com.github.tstout/db-io "1.0.3" :exclusions [com.google.guava/guava]]
+                 [com.github.tstout/db-io "1.0.2" :exclusions [com.google.guava/guava]]
                  [com.github.tstout/gd-io "0.1.0" :exclusions [clj-http]]
                  [com.draines/postal "2.0.2"]
                  [clj-http "3.7.0"]
@@ -48,8 +48,7 @@
   ;;
   :clean-targets ^{:protect false} ["resources/public/js/compiled" "target"]
 
-  :cljsbuild {
-              :builds [{:id           "dev"
+  :cljsbuild {:builds [{:id           "dev"
                         :source-paths ["src-cljs"]
 
                         :figwheel     {:on-jsload "kratzen.main/on-js-reload"}
@@ -63,12 +62,10 @@
 
                        {:id           "release"
                         :source-paths ["src-cljs"]
-                        :compiler     {
-                                       :output-to     "resources/public/js/compiled/kratzen.js"
+                        :compiler     {:output-to     "resources/public/js/compiled/kratzen.js"
                                        :optimizations :advanced
                                        :pretty-print  false}}]}
-  :figwheel {
-             ;; :http-server-root "public" ;; default and assumes "resources"
+  :figwheel {;; :http-server-root "public" ;; default and assumes "resources"
              ;; :server-port 3449 ;; default
              :css-dirs ["resources/public/css"]             ;; watch and update CSS
 
