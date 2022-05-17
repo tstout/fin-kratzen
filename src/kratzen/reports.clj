@@ -4,8 +4,8 @@
             [kratzen.db :refer [h2-local pool-db-spec run-query]]))
 
 (def sql
-  {:week-stmts (load-res "select-boa-last-7-days.sql")
-   :most-recent (load-res "select-boa-most-recent.sql")})
+  {:week-stmts (load-res "sql/select-boa-last-7-days.sql")
+   :most-recent (load-res "sql/select-boa-most-recent.sql")})
 
 (defn boa-stmts-week []
   (run-query (:week-stmts sql)))
