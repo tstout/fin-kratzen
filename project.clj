@@ -6,7 +6,7 @@
   :dependencies [[org.clojure/clojure "1.10.0"]
                  ;;[org.clojure/clojurescript "1.11.4" :exclusions [org.clojure/clojure junit]]
                  [com.andrewmcveigh/cljs-time "0.5.2"]
-                 [nrepl "0.6.0"]
+                 [nrepl "0.4.0"]
                  [clj-logging-config "1.9.12"]
                  [ring/ring-core "1.6.3" :exclusions [org.clojure/tools.reader]]
                  [ring/ring-jetty-adapter "1.6.3"]
@@ -38,10 +38,10 @@
   :uberjar-name "fin-kratzen.jar"
   ;;:hooks [leiningen.cljsbuild]
 
-  :plugins [[lein-autoexpect "1.4.2"]
+  :plugins [#_[lein-autoexpect "1.4.2"]
             #_[lein-cljsbuild "1.1.7"]
-            [lein-ring "0.9.3" :exclusions [org.clojure/clojure]]
-            [lein-expectations "0.0.7"]
+            #_[lein-ring "0.9.3" :exclusions [org.clojure/clojure]]
+            #_[lein-expectations "0.0.7"]
             #_[lein-figwheel "0.5.14" :exclusions [org.clojure/clojure org.codehaus.plexus/plexus-utils]]]
 
   ;;:source-paths ["src"]

@@ -1,5 +1,5 @@
 (ns kratzen.model
-  (:require [kratzen.config :refer :all]
+  (:require [kratzen.config :refer [load-res]]
             [kratzen.dates :refer :all]
             [clojure.walk :refer :all]
             [clojure.stacktrace :as st]
@@ -8,8 +8,8 @@
             [clojure.tools.logging :as log]))
 
 (def ^:private sql
-  {:select-boa (load-res "select-boa.sql")
-   :insert-boa (load-res "insert-boa.sql")})
+  {:select-boa (load-res "sql/select-boa.sql")
+   :insert-boa (load-res "sql/insert-boa.sql")})
 
 (defn fetch-boa
   ([db start end]

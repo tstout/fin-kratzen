@@ -12,7 +12,7 @@
   (:import [com.stuartsierra.component Lifecycle]))
 
 (def sql
-  {:old-backups (load-res "select-old-backup.sql")})
+  {:old-backups (load-res "sql/select-old-backup.sql")})
 
 (def local-backup-file
   (format

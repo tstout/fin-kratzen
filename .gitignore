@@ -12,3 +12,5 @@ pom.xml.asc
 *.ipr
 .clj-kondo
 resources/public/js/compiled
+.cpcache/
+.calva/

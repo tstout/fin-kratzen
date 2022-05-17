@@ -1,8 +1,8 @@
 (ns kratzen.core
-  (:require [kratzen.cli :refer :all])
-  (:require [kratzen.config :refer :all])
-  (:require [kratzen.system :refer :all])
-  (:use [clojure.tools.logging :only (info error)])
+  (:require [kratzen.cli :refer [process-args]])
+  (:require [kratzen.config :refer [load-res]])
+  (:require [kratzen.system :refer [run-service]])
+  #_(:use [clojure.tools.logging :only (info error)])
   (:gen-class :main true))
 
 (defn show-help []
