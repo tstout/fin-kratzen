@@ -26,22 +26,22 @@
   "Create a system out of individual components"
   [conf]
   (comp/system-map
-    :database (->Database)
-    :logging (comp/using
-               (->Logger (:channels conf) (:db-spec conf))
-               [:database])
-    :classifier (comp/using
-                  (->BayesClassifier (:db-spec conf))
+   :database (->Database)
+   :logging (comp/using
+             (->Logger (:channels conf) (:db-spec conf))
+             [:database])
+   :classifier (comp/using
+                (->BayesClassifier (:db-spec conf))
+                [:database :logging])
+   :http (comp/using (->Http) [:logging])
+   :backup (comp/using
+            (->Backup (:db-spec conf))
+            [:database :logging])
+   :boa-download (comp/using
+                  (boa-download 3600)
                   [:database :logging])
-    :http (comp/using (->Http) [:logging])
-    :backup (comp/using
-              (->Backup (:db-spec conf))
-              [:database :logging])
-    :boa-download (comp/using
-                    (boa-download 3600)
-                    [:database :logging])
-    :email (comp/using (->Email)
-                       [:database :logging])))
+   :email (comp/using (->Email)
+                      [:database :logging])))
 
 (defn system [] (get-system conf))
 

@@ -7,9 +7,9 @@
   (:import (com.stuartsierra.component Lifecycle)))
 
 (def sql
-  {:load-training                (load-res "select-class-training.sql")
-   :select-boa-unclassified      (load-res "select-boa-unclassified.sql")
-   :insert-boa-checking-category (load-res "insert-boa-checking-category.sql")})
+  {:load-training                (load-res "sql/select-class-training.sql")
+   :select-boa-unclassified      (load-res "sql/select-boa-unclassified.sql")
+   :insert-boa-checking-category (load-res "sql/insert-boa-checking-category.sql")})
 
 (defn categories [db-spec]
   (jdbc/with-db-connection
@@ -31,10 +31,10 @@
   [db-spec]
 
   (update-settings
-    settings
-    [:classes]
-    (mapv #(keyword (:name %)) (categories db-spec))
-    [:classifier :default :threshold?] false))
+   settings
+   [:classes]
+   (mapv #(keyword (:name %)) (categories db-spec))
+   [:classifier :default :threshold?] false))
 
 (defn unclassified-stmts [db-spec]
   (jdbc/with-db-connection
@@ -54,7 +54,7 @@
     (doseq [stmt (unclassified-stmts db-spec)]
       (let [class (.classify classifier (:description stmt))]
         (jdbc/insert!
-          conn :finkratzen.boa_checking_category (mk-category-record stmt class))))))
+         conn :finkratzen.boa_checking_category (mk-category-record stmt class))))))
 
 ;; TODO - see about cleaning this up with destructuring...
 ;;
@@ -75,8 +75,8 @@
 
 (defn update-classifications [db-spec]
   (->>
-    (prime-classifier db-spec)
-    (classify-stmts db-spec)))
+   (prime-classifier db-spec)
+   (classify-stmts db-spec)))
 
 (defrecord BayesClassifier [db-spec]
   Lifecycle
