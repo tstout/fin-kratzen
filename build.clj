@@ -23,7 +23,7 @@
    {:basis basis
     :uber-file uber-file
     :class-dir class-dir
-    :main (symbol "kratzen.core")}))
+    :main 'kratzen.core}))
 
 
 (comment
