@@ -2,13 +2,12 @@
   (:require [clj-http.client :as http]
             [clj-time.format :as tf]
             [clj-time.core :as t]
-            [kratzen.dates :refer [days-ago]]
             [kratzen.config :as cfg]
             [clojure.java.io :as io])
-  (:import (org.joda.time DateTimeZone)
-           (java.util UUID)
-           (net.sf.ofx4j.domain.data ResponseEnvelope MessageSetType)
-           (net.sf.ofx4j.io AggregateUnmarshaller)))
+  (:import
+   (java.util UUID)
+   (net.sf.ofx4j.domain.data ResponseEnvelope MessageSetType)
+   (net.sf.ofx4j.io AggregateUnmarshaller)))
 
 (def req-template
   "
@@ -65,15 +64,15 @@
 
 (defn fmt-date [d fmt-type]
   (->
-    fmt-type
-    time-fmt
-    tf/formatter
-    (tf/unparse d)))
+   fmt-type
+   time-fmt
+   tf/formatter
+   (tf/unparse d)))
 
 (defn t-days-ago [day-offset fmt-type]
   (fmt-date
-    (-> day-offset t/days t/ago)
-    fmt-type))
+   (-> day-offset t/days t/ago)
+   fmt-type))
 
 (defn ofx-date-range [m days-ago]
   (merge m {:dtstart (t-days-ago days-ago :start-end)
@@ -91,11 +90,11 @@
   an arbitrary text template"
   [parms template]
   (->>
-    parms
-    mk-pairs
-    (reduce
-      (fn [t kv] (let [[k v] kv] (.replace t k v)))
-      template)))
+   parms
+   mk-pairs
+   (reduce
+    (fn [t kv] (let [[k v] kv] (.replace t k v)))
+    template)))
 
 (defn build-req
   "Create an OFX SGML request based on the supplied map of parameters."
@@ -109,17 +108,17 @@
                 pass]} parms
         uuid (str (UUID/randomUUID))]
     (->
-      {"$newfile-id" uuid
-       "$dtclient"   (fmt-date (t/now) :dtclient)
-       "$trn-uid"    uuid
-       "$user"       user
-       "$pass"       pass
-       "$routing"    routing
-       "$account"    account
-       "$client-uid" client-id
-       "$dt-start"   dtstart
-       "$dt-end"     dtend}
-      (txt-from-template req-template))))
+     {"$newfile-id" uuid
+      "$dtclient"   (fmt-date (t/now) :dtclient)
+      "$trn-uid"    uuid
+      "$user"       user
+      "$pass"       pass
+      "$routing"    routing
+      "$account"    account
+      "$client-uid" client-id
+      "$dt-start"   dtstart
+      "$dt-end"     dtend}
+     (txt-from-template req-template))))
 
 (defn fetch-records [parms]
   (http/post "https://eftx.bankofamerica.com/eftxweb/access.ofx"
@@ -133,20 +132,20 @@
   Returns a raw OFX SGML response."
   [days]
   (->>
-    days
-    (ofx-date-range {})
-    (merge (cfg/creds))
-    fetch-records
-    :body))
+   days
+   (ofx-date-range {})
+   (merge (cfg/creds))
+   fetch-records
+   :body))
 
 (defn read-response
   "Use the OFX4J library to parse the SGML response"
   [resp]
   (with-open [data (io/input-stream (.getBytes resp))]
     (->
-      (.unmarshal (AggregateUnmarshaller. ResponseEnvelope) data)
-      (.getMessageSet MessageSetType/banking)
-      (.getStatementResponses))))
+     (.unmarshal (AggregateUnmarshaller. ResponseEnvelope) data)
+     (.getMessageSet MessageSetType/banking)
+     (.getStatementResponses))))
 
 ;; getAvailableBalance at same level as getTransactionList contains
 ;; balance
@@ -157,27 +156,32 @@
   (merge m
          {:transactions
           (some->>
-            (m :bank-trans)
-            (.getTransactionList)
-            (.getTransactions)
-            (map bean))}))
+           (m :bank-trans)
+           (.getTransactionList)
+           (.getTransactions)
+           (map bean))}))
 
 (defn extract-balance
   "Grab the balance from the ofx java object"
   [m]
   (merge m {:balance
             (some->
-              (m :bank-trans)
-              (.getAvailableBalance)
-              bean)}))
+             (m :bank-trans)
+             (.getAvailableBalance)
+             bean)}))
 
 (defn query-boa [days]
   (->>
-    days
-    fetch-trn
-    read-response
-    first
-    (.getMessage)
-    (assoc {} :bank-trans)
-    extract-trans
-    extract-balance))
+   days
+   fetch-trn
+   read-response
+   first
+   (.getMessage)
+   (assoc {} :bank-trans)
+   extract-trans
+   extract-balance))
+
+(comment
+  (query-boa 2)
+  ;;
+  )
