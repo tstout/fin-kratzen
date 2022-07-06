@@ -7,15 +7,6 @@
                                      writer]]
             [clojure.pprint :refer [pprint pp]]))
 
-;; (defn load-config
-;;   "Load configuration from ~/.fin-kratzen/config.clj
-;;    The config must be in EDN format."
-;;   []
-;;   (-> (System/getProperty "user.home")
-;;       (file ".fin-kratzen/config.clj")
-;;       slurp
-;;       edn/read-string))
-
 (def cfg-file
   (-> "user.home"
       System/getProperty
@@ -65,8 +56,8 @@
 (def creds
   (memoize (fn [] (:boa (load-config)))))
 
-(def backup-host 
-  (delay 
+(def backup-host
+  (delay
    (:backup-host (load-config))))
 
 

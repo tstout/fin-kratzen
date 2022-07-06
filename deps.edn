@@ -16,9 +16,7 @@
         judgr/judgr                           {:mvn/version "0.3.0"}
         org.clojure/java.jdbc                 {:mvn/version "0.7.4"}
         com.andrewmcveigh/cljs-time           {:mvn/version "0.5.2"}
-        clj-http/clj-http                     {:mvn/version "3.7.0"}
-        com.github.tstout/gd-io               {:mvn/version "0.1.0"
-                                               :exclusions [clj-http com.google.guava/guava]}
+        clj-http/clj-http                     {:mvn/version "3.7.0"} 
         log4j/log4j {:mvn/version "1.2.17"
                      :exclusions
                      [javax.mail/mails

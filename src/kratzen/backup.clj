@@ -1,15 +1,13 @@
 (ns kratzen.backup
-  (:require [gd-io.file :refer [mk-gdrive]]
-            [gd-io.protocols :refer [upload rm]]
-            [clojure.java.jdbc :as jdbc]
-            [clojure.tools.logging :as log]
-            [clojure.core.async :refer [close!]]
-            [kratzen.db :refer [next-seq-val pool-db-spec h2-local]]
-            [kratzen.scheduler :refer [task]]
-            [kratzen.dates :refer [every-day-at]]
-            [clojure.java.io :refer [file]]
-            [kratzen.config :refer [load-res]]
-            [kratzen.ssh :refer [scp]])
+  (:require 
+   [clojure.java.jdbc :as jdbc]
+   [clojure.tools.logging :as log]
+   [clojure.core.async :refer [close!]]
+   [kratzen.db :refer [next-seq-val pool-db-spec h2-local]]
+   [kratzen.scheduler :refer [task]]
+   [kratzen.dates :refer [every-day-at]] 
+   [kratzen.config :refer [load-res]]
+   [kratzen.ssh :refer [scp ssh-rm]])
   (:import [com.stuartsierra.component Lifecycle]))
 
 (def sql
@@ -39,11 +37,12 @@
     (jdbc/delete! conn :finkratzen.backup_files ["ID = ?" id])))
 
 (defn rm-old-backups [db-spec]
-  (let [gdrive (mk-gdrive)]
-    (doseq [{:keys [id file_name]} (legacy-backup-files db-spec)]
-      (log/infof "deleting backup file %s" file_name)
-      (rm gdrive id)
-      (rm-backup-meta id db-spec))))
+  ;;(let [gdrive (mk-gdrive)]
+  (doseq [{:keys [id file_name]} (legacy-backup-files db-spec)]
+    (log/infof "deleting backup file %s" file_name)
+    #_(rm gdrive id)
+    (ssh-rm file_name)
+    (rm-backup-meta id db-spec)))
 
 (defn mk-backup
   "Create a backup zip of the H2 database.
@@ -65,19 +64,13 @@
                   :finkratzen.log
                   ["when <= getdate() - 30"])))
 
-(defn upload-to-gdrive [bfile]
-  (->
-   (mk-gdrive)
-   (upload {:title         bfile
-            :parent-folder "/backup/fin-kratzen"
-            :file          (file (local-backup-file bfile))})))
-
 (defn scp-backup
   "Perform a ssh secure copy to remote backup storage."
   []
   (let [bk-fname (mk-backup (pool-db-spec h2-local))]
     (log/infof "copying file %s to backup storage..." bk-fname)
-    (scp bk-fname)))
+    (scp bk-fname)
+    bk-fname))
 
 (defn save-backup-meta [file-id file-name]
   (jdbc/with-db-connection
@@ -93,11 +86,10 @@
   (trim-logs)
   (rm-old-backups db-spec)
   (log/info "creating local backup...")
-  (mk-backup db-spec)
-  (let [bfile (next-backup-file)
-        gdrive-file-id (upload-to-gdrive bfile)]
-    (log/infof "uploaded backup file %s (%s)" bfile gdrive-file-id)
-    (save-backup-meta gdrive-file-id bfile)))
+  (let [bfile (scp-backup)
+        file-id (java.util.UUID/randomUUID)]
+    (log/infof "uploaded backup file %s (%s)" bfile file-id)
+    (save-backup-meta file-id bfile)))
 
 (defrecord Backup [db-spec]
   Lifecycle
@@ -116,11 +108,10 @@
   *e
   (scp-backup)
   (next-backup-file)
-  ;;(mk-backup)
+
   (-> h2-local
       pool-db-spec
       upload-backup)
 
-  (= [1 2 3] [1 2 3])
   ;;
   )
