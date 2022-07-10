@@ -1,4 +1,10 @@
 (ns kratzen.ssh
+  "Provide primtives for executing ssh commands to upload and
+   purge backup files. For many years finkratzen used google drive
+   to store backups. Headless access to grive is being disabled as of
+   October 2022. While using ssh commands via a shell seems a bit hacky,
+   it is simpler than using the various ssh libraries available. I don't intend
+   to ever run this software outside a unix environment."
   (:require [clojure.java.shell :as shell]
             [clojure.tools.logging :as log]
             [kratzen.config :refer [backup-host]]))
