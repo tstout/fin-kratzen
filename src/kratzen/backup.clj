@@ -1,11 +1,11 @@
 (ns kratzen.backup
-  (:require 
+  (:require
    [clojure.java.jdbc :as jdbc]
    [clojure.tools.logging :as log]
    [clojure.core.async :refer [close!]]
    [kratzen.db :refer [next-seq-val pool-db-spec h2-local]]
    [kratzen.scheduler :refer [task]]
-   [kratzen.dates :refer [every-day-at]] 
+   [kratzen.dates :refer [every-day-at every-x-minutes]]
    [kratzen.config :refer [load-res]]
    [kratzen.ssh :refer [scp ssh-rm]])
   (:import [com.stuartsierra.component Lifecycle]))
@@ -96,6 +96,7 @@
   (start [this]
     (log/info "Starting backup component...")
     (assoc this :backup (task
+                         #_(every-x-minutes 1)
                          (every-day-at 7)
                          (fn [_] (upload-backup db-spec)))))
   (stop [this]

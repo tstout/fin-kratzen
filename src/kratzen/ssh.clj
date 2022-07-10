@@ -1,5 +1,6 @@
 (ns kratzen.ssh
   (:require [clojure.java.shell :as shell]
+            [clojure.tools.logging :as log]
             [kratzen.config :refer [backup-host]]))
 
 (defn identity-file [key-file]
@@ -17,6 +18,7 @@
   On error an exception is thrown with the non-zero exit code and stderr."
   [args]
   {:pre [(coll? args)]}
+  (log/infof "Executing sh command with args %s" args)
   (let [{:keys [error exit out]} (apply shell/sh args)]
     (when-not (zero? exit)
       (throw (ex-info (format "cmd %s failed" (first args))
@@ -29,8 +31,7 @@
   [host backup-fname]
   ["scp"
    "-i"
-   "~/opc/ssh-key-2022-05-06.key"
-   #_(str "~/.fin-kratzen/db/" backup-fname)
+   (identity-file "opc/ssh-key-2022-05-06.key") 
    (str (home-dir) "/.fin-kratzen/db/" backup-fname)
    (str "opc@" host ":/home/opc/backup/fin-kratzen")])
 
@@ -39,7 +40,7 @@
   ["ssh"
    (str "opc@" host)
    "-i"
-   "~/opc/ssh-key-2022-05-06.key"
+   (identity-file "opc/ssh-key-2022-05-06.key")
    (format "rm /home/opc/backup/fin-kratzen/%s" backup-fname)])
 
 (defn scp
