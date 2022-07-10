@@ -1,25 +1,14 @@
 (ns kratzen.config
   (:require [clojure.edn :as edn]
             [clojure.java.io :refer [resource
-                                     as-file
                                      file
                                      make-parents
                                      output-stream
                                      writer]]
             [clojure.pprint :refer [pprint pp]]))
 
-(defn load-config
-  "Load configuration from ~/.fin-kratzen/config.clj
-   The config must be in EDN format."
-  []
-  (-> (System/getProperty "user.home")
-      (file ".fin-kratzen/config.clj")
-      slurp
-      edn/read-string))
-
 (def cfg-file
-  (->
-      "user.home"
+  (-> "user.home"
       System/getProperty
       (file ".fin-kratzen/config.clj")))
 
@@ -32,7 +21,8 @@
          :db-user ""
          :db-pass ""}
    :email {:user ""
-           :pass ""}})
+           :pass ""}
+   :backup-host ""})
 
 (defn mk-config []
   (when-not (.exists cfg-file)
@@ -52,8 +42,7 @@
 (def cfg (load-config))
 
 
-(defn
-  load-res [res]
+(defn load-res [res]
   (-> res
       resource
       slurp))
@@ -66,3 +55,15 @@
 
 (def creds
   (memoize (fn [] (:boa (load-config)))))
+
+(def backup-host
+  (delay
+   (:backup-host (load-config))))
+
+
+(comment
+  (creds)
+  (load-config)
+  @backup-host
+  ;;
+  )

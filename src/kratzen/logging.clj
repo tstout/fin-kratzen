@@ -17,7 +17,8 @@
    "kratzen.boa"
    "kratzen.scheduler"
    "kratzen.model"
-   "kratzen.email"])
+   "kratzen.email"
+   "kratzen.ssh"])
 
 (defn- log-ev->map [ev]
   (assoc (bean ev) :event ev))
@@ -55,15 +56,15 @@
     (log-cfg/set-config-logging-level! :debug))
 
   (log-cfg/set-loggers!
-    log-ns
-    {:name  "console"
-     :level :debug
-     :out   (ConsoleAppender.
-              (EnhancedPatternLayout. "%d %-5p %c: %m%n"))}
-    log-ns
-    {:name  "database"
-     :level :debug
-     :out   (mk-db-appender db-spec)}))
+   log-ns
+   {:name  "console"
+    :level :debug
+    :out   (ConsoleAppender.
+            (EnhancedPatternLayout. "%d %-5p %c: %m%n"))}
+   log-ns
+   {:name  "database"
+    :level :debug
+    :out   (mk-db-appender db-spec)}))
 
 (defrecord Logger [channels db-spec]
   component/Lifecycle
